@@ -10,7 +10,7 @@ var lusydEngine = {
 	connect: function(){
 		var my = this; // to maintain scope //
 		
-		this.ws = new WebSocket('ws://127.0.0.1:6060');
+		this.ws = new WebSocket('ws://' + window.location.hostname + ':6060');
 		
 		this.ws.onopen = function(){
 			if(my.firstConnect){
