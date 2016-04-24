@@ -19,6 +19,11 @@ There are a few chat clients floating around, however I did not find any that me
 
 
 
+UI partially developed & based off of work from designs made by @ToastyStoemp
+
+
+
+
 # Usage
 Lusyd is designed to be run on a vps. It can also be run on your home machine with port forwarding.
 
@@ -63,3 +68,5 @@ Clone Git, modify config & initialize:
 	Channel url support
 	Change nick / away
 	Add LaTeX
+	Click notifiction -> show channel & Chat event count; "(3)"
+	Add "atelier-dune" css
