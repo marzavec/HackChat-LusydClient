@@ -1,0 +1,229 @@
+@charset "UTF-8";
+/* changing this file is not recommended */
+
+/* global css */
+@font-face {
+  font-family: 'DejaVuSansMono';
+  src: url('../fonts/DejaVuSansMono.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'DejaVuSansMono-Bold';
+  src: url('../fonts/DejaVuSansMono-Bold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'icon';
+  src: url('../fonts/foundation-icons.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'VertigoPlusFLF';
+  src: url('../fonts/VertigoPlusFLF.ttf') format('truetype');
+}
+
+* {
+	transform-origin: 0px 0px 0px;
+}
+
+html|* > svg {
+	transform-origin: 50% 50% 0px;
+}
+
+svg:not(:root), symbol, image, marker, pattern, foreignObject {
+	overflow: hidden;
+}
+
+html, body {
+	height:100%;
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+}
+
+#rightGate, #leftGate {
+	transition: all 0.75s;
+	transform: translate3d(0, 0, 0);
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+#rightGate svg, #leftGate svg{
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+#menuBtn{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	padding-left: 8px;
+	display:inline-block;
+	font-family: 'icon';
+}
+
+#tabHolder{
+	transition: all 0.75s;
+	transform: translate3d(0, 0, 0);
+	position: absolute;
+	top: 0;
+	width: 100%;
+	height: 52px;
+	margin: 0 auto;
+	left: 0;
+	margin-left: auto;
+	margin-right: auto;
+	display: table;
+	z-index: 999;
+}
+
+.tabBtn{
+	display: table-cell;
+	vertical-align: bottom;
+	text-align: center;
+	cursor: pointer;
+}
+
+.tabBtn:hover{
+	text-decoration: underline;
+}
+
+.icon{
+	font-family: 'icon';
+	font-size: 45px;
+}
+
+input, textarea {
+	width: 75%;
+	outline: none;
+	resize: none;
+	box-sizing: border-box;
+	padding: 14px;
+	padding-bottom: 7px;
+}
+
+#chatInput{
+	position: absolute;
+	bottom: 0;
+	left: 0;
+    right: 0;
+	width: 75%;
+	height: 52px;
+	margin: 0 auto;
+	margin-left: auto;
+    margin-right: auto;
+    overflow: hidden;
+	padding: 1em;
+	padding-bottom: 0em;
+}
+
+/* chat display css */
+.chatOutput{
+	position: absolute;
+	bottom: 56px;
+	left: 0;
+    right: 0;
+	width: 96vw;
+	max-width: 96vw;
+	height: calc(100vh - 56px);
+	margin: 0 auto;
+	margin-left: auto;
+    margin-right: auto;
+    overflow-y: hidden;
+	display: table;
+	border-collapse: separate;
+    border-spacing: 0 1em;
+}
+
+.chatLine{
+	display: table-row;
+}
+
+.chatLine .leftSide{
+	display: table-cell;
+	text-align: right;
+	padding-right: 7px;
+	max-width: 210px;
+	width: 210px;
+    word-wrap: break-word;
+}
+
+.chatLine .leftSide span{ /* trip */
+	font-size: 11px;
+	padding-right: 7px;
+}
+
+.chatLine .rightSide{
+	display: table-cell;
+	max-width: calc(92vw - 210px);
+	word-wrap: break-word;
+}
+
+.admin b{ /* admin nick */
+	color: #dc322f !important;
+}
+
+/* menu css */
+.menu::before{
+	content: ' ';
+	position: absolute;
+	transition: all 0.25s;
+	transform: translate3d(-12.5%, -12.5%, 0px);
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: -10;
+	background: rgba(0, 0, 0, 0.5);
+}
+
+.menu{
+	display: table;
+	margin: 0 auto;
+	position: absolute;
+	transition: all 0.25s;
+	transform: translate3d(0px, 0px, 0px);
+	top: 12.5%;
+	left: 12.5%;
+	width: 75vw;
+	height: 75vh;
+	text-align: center;
+	z-index: 1000;
+	opacity: 0;
+}
+
+.closeMenuBtn{
+	position: absolute;
+	transition: all 0.25s;
+	transform: translate3d(0px, 0px, 0px);
+	top: 0;
+	right: 0;
+}
+
+.menuRow{
+	display: table-row;
+}
+
+.menuLink{
+	margin: 0 auto;
+    display: table-cell;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 16px;
+	cursor: pointer;
+}
+
+select {
+	margin: 0 auto;
+    width: 90%;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding: 16px;
+}

@@ -1,0 +1,114 @@
+@charset "UTF-8";
+
+/* global css */
+html, body {
+	background-color: #3E362F;
+	color: #AF5B1D;
+}
+
+body {
+	font-family: 'DejaVuSansMono';
+	letter-spacing: 2px;
+}
+
+#menuBtn{
+	color: #AF5B1D;
+	font-size: 52px;
+}
+
+#tabHolder{
+	background: #2E2823;
+	border-bottom: solid 2px #AF5B1D;
+}
+
+.tabBtn{
+	
+}
+
+.tabBtn:hover{
+	color: #FFF;
+}
+
+input, textarea {
+	color: #AF5B1D;
+	background: #2E2823;
+	border-top: solid 2px #AF5B1D;
+	border-left: solid 2px #AF5B1D;
+	border-bottom: solid 2px #020202;
+	border-right: solid 2px #020202;
+	font-family: 'DejaVuSansMono-Bold';
+}
+
+#chatInput{
+	background-color: #554D47;
+	border: none;
+	border-top: 2px solid #AF5B1D;
+	color: #cbc1b8;
+}
+
+/* chat display css */
+.chatOutput{
+	color: #cbc1b8;
+}
+
+.chatLine{
+	text-shadow: 2px 0 1px #000;
+}
+
+.odd{ background-color: #554D47; }
+
+.chatLine .leftSide span{ /* trip */
+	color: #DDD;
+	text-shadow: none;
+}
+
+.chatLine .leftSide b{ /* nick */
+	color: #AF5B1D;
+}
+
+.donator{
+	border-bottom: 2px #AF5B1D solid;
+}
+
+.me{
+	
+}
+
+.warn{
+	
+}
+
+.info{
+	
+}
+
+.shout{
+	
+}
+
+.mention{
+	color: #b58900;
+}
+
+/* menu css */
+.menu{
+	
+}
+
+.menuOpen{
+	opacity: 1;
+}
+
+.menuLink{
+	
+}
+
+.menuLink:hover{
+	color: #FFF;
+}
+
+select {
+	border: solid 2px #554D47;
+	background-color: #3E362F;
+	color: #FFF;
+}
