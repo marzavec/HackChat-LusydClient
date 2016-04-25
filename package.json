@@ -1,0 +1,27 @@
+{
+  "name": "LusydClient",
+  "version": "0.0.1",
+  "description": "A cross platform cross server chat client",
+  "main": "main.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/marzavec/HackChat-LusydClient.git"
+  },
+  "keywords": [
+    "chat",
+    "client"
+  ],
+  "author": {
+    "name": "",
+    "email": "",
+    "url": "https://github.com/marzavec"
+  },
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/marzavec/HackChat-LusydClient/issues"
+  },
+  "dependencies": {
+    "ultron": "^1.0.2",
+    "ws": "^1.1.0"
+  }
+}
