@@ -1,6 +1,21 @@
 /*
 
 */
+roomPresets.push({
+					title: 'ToastyStoemp - Programming',
+					domain: 'chat.toastystoemp.com',
+					wsPath: 'wss://chat.toastystoemp.com/chatws',
+					channel: 'devtest',
+					protocol: 'toasty'
+				});
+
+roomPresets.push({
+					title: 'ToastyStoemp - Programming',
+					domain: 'chat.toastystoemp.com',
+					wsPath: 'wss://chat.toastystoemp.com/chatws',
+					channel: 'programming',
+					protocol: 'toasty'
+				});
 
 roomPresets.push({
 					title: 'Hack.Chat - DevTest',
@@ -16,14 +31,6 @@ roomPresets.push({
 					wsPath: 'wss://hack.chat/chat-ws',
 					channel: 'programming',
 					protocol: 'vanilla'
-				});
-
-roomPresets.push({
-					title: 'ToastyStoemp - Programming',
-					domain: 'chat.toastystoemp.com',
-					wsPath: 'wss://chat.toastystoemp.com/chatws',
-					channel: 'programming',
-					protocol: 'toasty'
 				});
 				
 roomPresets.push({

@@ -16,5 +16,6 @@ mainConfig = {
 	logSecurity: true, // log failed or unauthorized usage attempts //
 	
 	cacheEnabled: true, // allow message caching //
-	maxCachedMsgs: 200 // how many chat events to store per channel //
+	maxCachedMsgs: 200, // how many chat events to store per channel //
+	proxyImages: true // allow client to load images through lusyd server //
 }

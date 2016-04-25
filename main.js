@@ -5,6 +5,7 @@
 // import classes //
 fileSys = require('fs');
 httpSocket = require('http');
+httpsSocket = require('https');
 webSocket = require('ws');
 require('./config/mainConfig.js');
 require('./include/log.js');

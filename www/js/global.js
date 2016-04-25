@@ -184,10 +184,12 @@ function tripToColor(trip){
 }
 
 function parseLinks(data){
-	var newData = data;
+	console.log(data);
+	var newData = JSON.parse(JSON.stringify(data));
 	var channels = newData.text.match(/\?\w+\s/ig);
 	var urls = newData.text.match(/((https?:\/\/|www)\S+)|(\w*.(com|org|net|moe)\b)/ig);
-	if (!urls) return;
+	if (!urls) return newData;
+	
 	var youtubeLinks = urls.join(" ").match(/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*t/);
 
 	urls.forEach(function(link){
@@ -197,20 +199,20 @@ function parseLinks(data){
 		//Image link
 		if((/\.(jpe?g|png|gif|bmp)$/i).test(link)){
 			a.setAttribute("onclick", "this.appendChild(createGraphicEl(this, 'img'))");
-			newData = newData.text.replace(link, a.outerHTML);
+			newData.text = newData.text.replace(link, a.outerHTML);
 		}
 
 		//Video link
 		else if((/\.(webm|mp4|ogg|gifv)$/i).test(link)){
 			a.setAttribute("onclick", "this.appendChild(createGraphicEl(this, 'video'))");
-			newData = newData.text.replace(link, a.outerHTML);
+			newData.text = newData.text.replace(link, a.outerHTML);
 		}
 
 		//Youtube
 
 		else if(youtubeLinks){
 			a.setAttribute("onclick", "this.appendChild(createGraphicEl(youtubeLinks[7]))");
-			newData = newData.text.replace(link, a.outerHTML);
+			newData.text = newData.text.replace(link, a.outerHTML);
 			//https://www.googleapis.com/youtube/v3/videos?key=YOUR_API_KEY&part=snippet&id=VIDEO_ID
 		}
 
@@ -220,14 +222,13 @@ function parseLinks(data){
 	return newData;
 }
 
-function createYouTubeElement(link) {
+function createYouTubeElement(link){
 	var iframe = document.createElement('iframe');
 	setAttributes(iframe, {"src": "https://www.youtube.com/embed/" + link + "?version=3&enablejsapi=1", "width": "640", "height": "385", "frameborder": "0", "allowFullScreen": ""});
 	return iframe;
 }
 
-function createGraphicEl(link, type)
-{
+function createGraphicEl(link, type){
 	var el = document.createElement(type);
 	setAttributes(el, {"src": link.innerHTML, "height": "50%", "width": "50%"});
 	el.onclick = function() {
@@ -236,15 +237,14 @@ function createGraphicEl(link, type)
 	return el;
 }
 
-function setAttributes(element, attributes) {
-	for(var key in attributes) {
+function setAttributes(element, attributes){
+	for(var key in attributes){
 		element.setAttribute(key, attributes[key]);
  	}
 }
 
 function pushMessage(targetDiv, data){
 	if(typeof targetDiv === 'undefined' || typeof targetDiv.childNodes === 'undefined') return; // fix this bandaid later :D //
-	//console.log(targetDiv);
 
 	var chatLine = document.createElement('div');
 	chatLine.setAttribute('class', 'chatLine');

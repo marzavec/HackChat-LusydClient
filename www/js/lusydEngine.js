@@ -10,7 +10,7 @@ var lusydEngine = {
 	connect: function(){
 		var my = this; // to maintain scope //
 		
-		this.ws = new WebSocket('ws://' + window.location.hostname + ':6060');
+		this.ws = new WebSocket('ws://' + window.location.hostname + ':' + String(serverSettings['port']));
 		
 		this.ws.onopen = function(){
 			if(my.firstConnect){
@@ -67,6 +67,10 @@ var lusydEngine = {
 	
 	getCachedMsgs: function(id){
 		this.send({cmd: 'getCachedMsgs', id: id });
+	},
+	
+	getContentURL: function(url){
+		this.send({cmd: 'getContent', url: url });
 	},
 	
 	sendChat: function(text, id){

@@ -5,6 +5,7 @@ var framework = {
 				'js/touchControl.js',
 				'js/global.js',
 				'js/clientConfig.js',
+				'js/serverSettings.js',
 				'js/init.js'
 				],
 	

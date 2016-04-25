@@ -46,6 +46,15 @@ body {
 	padding: 0;
 }
 
+a{
+	text-decoration: underline;
+}
+
+a:hover{
+	text-decoration: none;
+	cursor: pointer;
+}
+
 #rightGate, #leftGate {
 	transition: all 0.75s;
 	transform: translate3d(0, 0, 0);

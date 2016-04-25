@@ -62,7 +62,16 @@ chatEngine = {
 			
 			if(mainConfig.cacheEnabled) cacheControl.add(my.myID, data);
 			
-			if(data.cmd == 'chat' && data.text.indexOf("@" + my.myNick) != -1) data.mention = true;
+			if(data.cmd == 'chat'){
+				if(data.text.indexOf("@" + my.myNick) != -1) data.mention = true;
+				var forbidden = {
+				'<':'&#60;',
+				'>':'&#62;'
+				};
+				data.text = data.text.replace(/<|>/gi, function(matched){
+					return forbidden[matched];
+				});
+			}
 			
 			data.id = my.myID;
 			wsServer.broadCast(data);

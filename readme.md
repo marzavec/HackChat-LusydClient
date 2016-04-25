@@ -15,6 +15,7 @@ There are a few chat clients floating around, however I did not find any that me
 - [x] *Logging*, log security events, errors, etc.
 - [ ] *Quick Nick Change*, quickly change nick across all channels; Marzavec -> afk_Marzavec
 - [ ] *LaTeX*, of course
+- [ ] *Proxy Simple Content*, if enabled the server will 
 
 
 
@@ -70,3 +71,5 @@ Clone Git, modify config & initialize:
 	Add LaTeX
 	Click notifiction -> show channel & Chat event count; "(3)"
 	Add "atelier-dune" css
+	Proxy content
+	Preprocess server->client settings

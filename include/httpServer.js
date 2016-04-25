@@ -63,7 +63,15 @@ httpServer = {
 				readStream.on('end', function(e){ socket.end(); });
 				
 				readStream.pipe(socket);
-			} else {
+			}else if(path == './www/js/serverSettings.js'){
+				var virtualPage = 'var serverSettings = [];';
+				virtualPage += 'serverSettings["port"] = ' + mainConfig.wsPort + ';';
+				virtualPage += 'serverSettings["willProxy"] = ' + mainConfig.proxyImages + ';';
+				
+				socket.writeHead(200, {'Content-Type': 'text/javascript'});
+				socket.write(virtualPage);
+				socket.end();
+			}else{
 				httpServer.sendfourOhFour(socket);
 			}
 		});

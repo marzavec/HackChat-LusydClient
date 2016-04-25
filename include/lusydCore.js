@@ -54,6 +54,58 @@ lusydCore = {
 		}
 	},
 	
+	getContent: function(socket, data){
+		var contentExt = data.url.substr(data.url.lastIndexOf('.') + 1);
+		
+		var socketType = '';
+		if(data.url.indexOf('http') == -1){
+			socketType = 'http';
+			data.url = 'http://' + data.url;
+		}else{
+			socketType = data.url.split(':')[0];
+		}
+		
+		var contentHost = data.url.split('/')[2];
+		var contentPath = data.url.replace(socketType + '://' + contentHost, '');
+		var header = { 'User-agent': 'Mozilla/5.0 (Windows NT 6.1; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/49.0.2623.112 Safari/537.36' } // you say bad form; I say privacy //
+		
+		if(socketType == 'http'){
+			httpSocket.get({
+				host: contentHost,
+				path: contentPath,
+				headers: header
+			}, function(response){
+				var body = '';
+				response.on('data', function(d){
+					body += d;
+				});
+				response.on('end', function(){
+					contentType = response.headers['content-type'];
+					console.log(response.headers['content-type']);
+					wsServer.sendTo(socket, { 'cmd': 'onContentData', 'data': 'data:' + contentType + ';base64,' + (new Buffer(body).toString('base64')) });
+				});
+				response.on('error', function(err) { });
+			});
+		}else if(socketType == 'https'){
+			httpsSocket.get({
+				host: contentHost,
+				path: contentPath,
+				headers: header
+			}, function(response){
+				var body = '';
+				response.on('data', function(d){
+					body += d;
+				});
+				response.on('end', function(){
+					contentType = response.headers['content-type'];
+					console.log(response.headers['content-type']);
+					wsServer.sendTo(socket, { 'cmd': 'onContentData', 'data': 'data:' + contentType + ';base64,' + (new Buffer(body).toString('base64')) });
+				});
+				response.on('error', function(err) { });
+			});
+		}
+	},
+	
 	buildNewChat: function(){
 		function chat(){};
 		chat.prototype = chatEngine;
