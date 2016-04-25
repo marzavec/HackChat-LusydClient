@@ -16,6 +16,11 @@ require('./include/wsServer.js');
 require('./include/chatEngine.js');
 require('./include/modules.js');
 
+//create log folder
+if (!fileSys.existsSync('./logs')){
+    fileSys.mkdirSync('./logs');
+}
+
 // import server modules //
 var moduleList = fileSys.readdirSync('./modules/');
 moduleList.forEach(function(mod){
