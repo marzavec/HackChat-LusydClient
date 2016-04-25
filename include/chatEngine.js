@@ -60,21 +60,19 @@ chatEngine = {
 
 		this.ws.onmessage = function(message){
 			var data = JSON.parse(message.data);
-			if (data.cmd == "chat") {
-				data.isLastPoster = (this.lastPoster == data.nick);
-				this.lastPoster = data.nick;
-				console.log(JSON.stringify(data));
-			}
 
 			if(mainConfig.cacheEnabled) cacheControl.add(my.myID, data);
 
 			if(data.cmd == 'chat'){
-				if(data.text.indexOf("@" + my.myNick) != -1) data.mention = true;
+				data.isLastPoster = (this.lastPoster == data.nick);
+				this.lastPoster = data.nick;
+				if(data.text.toLowerCase().indexOf(my.myNick.toLowerCase()) != -1) data.mention = true;
 				var forbidden = {
+				'&':'&amp;',
 				'<':'&#60;',
 				'>':'&#62;'
 				};
-				data.text = data.text.replace(/<|>/gi, function(matched){
+				data.text = data.text.replace(/(&|<|>)/g, function(matched){
 					return forbidden[matched];
 				});
 			}
