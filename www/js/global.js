@@ -11,21 +11,21 @@ var currentMenu = '';
 
 function connectionList(conList){
 	console.log('got connectionList reply');
-	
+
 	if(conList.data.length == 0){
 		lusydEngine.startNewConnection(roomPresets[0]);
 		return;
 	}
-	
+
 	// get cached messages for each channel //
 	conList.data.forEach(function(meta){
 		var newCon = connectedChannels.push({ id: meta.id, domain: meta.domain, channel: meta.channel, chanDiv: gui.genDom('div', '', 'chatOutput', '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>') }) - 1;
 		document.body.appendChild(connectedChannels[newCon].chanDiv);
-		
+
 		gui.addConnectionTab(meta.id, meta.domain, meta.channel);
-		
+
 		connectedChannels[newCon].chanDiv.style.display = 'none';
-		
+
 		lusydEngine.getCachedMsgs(meta.id);
 	});
 }
@@ -41,16 +41,16 @@ function onCacheMsgData(msgData){
 function onNewConnection(data){
 	var newCon = connectedChannels.push({ id: data.id, domain: data.domain, channel: data.channel, chanDiv: gui.genDom('div', '', 'chatOutput', '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>') }) - 1;
 	document.body.appendChild(connectedChannels[newCon].chanDiv);
-	
+
 	gui.addConnectionTab(data.id, data.domain, data.channel);
-	
+
 	changeChannel(data.id);
 }
 
 function onConnectionClosed(data){
 	var chatTab = document.getElementById(data.id);
 	chatTab.parentNode.removeChild(chatTab);
-	
+
 	for(var i = 0, j = connectedChannels.length; i < j; i++){
 		if(connectedChannels[i].id == data.id){
 			connectedChannels[i].chanDiv.parentNode.removeChild(connectedChannels[i].chanDiv);
@@ -79,7 +79,7 @@ function chanIdToDiv(id){
 }
 
 function chat(data){
-	pushMessage(chanIdToDiv(data.id), data, parseLinks(data.text));
+	pushMessage(chanIdToDiv(data.id), parseLinks(data));
 }
 
 function info(data){
@@ -123,7 +123,7 @@ function changeChannel(newChan){
 			break;
 		}
 	}
-	
+
 	if(typeof connectedChannels[currentChannel] !== 'undefined') connectedChannels[currentChannel].chanDiv.style.display = 'none';
 	currentChannel = targetChan;
 	connectedChannels[currentChannel].chanDiv.style.display = 'table';
@@ -147,9 +147,9 @@ function openConnectionByTitle(title){
 
 function closeCurrentMenu(event){
 	if(typeof event !== 'undefined' && event.preventDefault) event.preventDefault(event);
-	
+
 	if(typeof gui.menus[currentMenu] === 'undefined') return;
-	
+
 	//var wait = touchControl.unbindEvent(gui.menus[currentMenu]);
 	removeClass(gui.menus[currentMenu], 'menuOpen');
 	gui.menus[currentMenu].parentNode.removeChild(gui.menus[currentMenu]);
@@ -164,12 +164,12 @@ function ignoreUser(nick){
 function notifyUser(text, user){
 	if(typeof text !== 'undefined'){
 		notifySound.play();
-		
+
 		var notif = new Notification(user + ' mentioned you.', {
 			body: text,
 			icon: 'https://toastystoemp.com/public/notifi-icon.png'
 		});
-		
+
 		setTimeout(function(){
 			notif.close();
 		}, 8000);
@@ -177,8 +177,6 @@ function notifyUser(text, user){
 }
 
 function tripToColor(trip){
-	if(trip == "vmowGH")
-		return "#cd3333";
 	var color1 = (Math.floor((trip[0].charCodeAt(0) - 33) * 2.865)).toString(16);
 	var color3 = (Math.floor((trip[1].charCodeAt(0) - 33) * 2.865)).toString(16);
 	var color2 = (Math.floor((trip[2].charCodeAt(0) - 33) * 2.865)).toString(16);
@@ -186,76 +184,104 @@ function tripToColor(trip){
 }
 
 function parseLinks(data){
-	var returnData = {imgs: [], urls: [], channels: []};
-	
-	// needs to be updated //
-	/*data.split(' ').forEach(function(block){
-		if((/(\b(https?|ftp|file):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/ig).test(block)){
-			if((/\.(gif|jpg|jpeg|tiff|png)$/i).test(block)){
-				returnData.imgs.push(block);
-			}else{
-				returnData.urls.push(block);
-			}
-		}else if(block.length > 1 && block.substr(0, 1) == '?'){
-			returnData.channels.push(block);
+	var newData = data;
+	var channels = newData.text.match(/\?\w+\s/ig);
+	var urls = newData.text.match(/((https?:\/\/|www)\S+)|(\w*.(com|org|net|moe)\b)/ig);
+	if (!urls) return;
+	var youtubeLinks = urls.join(" ").match(/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*t/);
+
+	urls.forEach(function(link){
+		var a = document.createElement('a');
+		a.innerHTML = link;
+
+		//Image link
+		if((/\.(jpe?g|png|gif|bmp)$/i).test(link)){
+			a.setAttribute("onclick", "this.appendChild(createGraphicEl(this, 'img'))");
+			newData = newData.text.replace(link, a.outerHTML);
 		}
-	});*/
-	
-	return returnData;
+
+		//Video link
+		else if((/\.(webm|mp4|ogg|gifv)$/i).test(link)){
+			a.setAttribute("onclick", "this.appendChild(createGraphicEl(this, 'video'))");
+			newData = newData.text.replace(link, a.outerHTML);
+		}
+
+		//Youtube
+
+		else if(youtubeLinks){
+			a.setAttribute("onclick", "this.appendChild(createGraphicEl(youtubeLinks[7]))");
+			newData = newData.text.replace(link, a.outerHTML);
+			//https://www.googleapis.com/youtube/v3/videos?key=YOUR_API_KEY&part=snippet&id=VIDEO_ID
+		}
+
+		//Normal Link or Channel
+		setAttributes(a, {"href": link, "target": "_blank"});
+	});
+	return newData;
 }
 
-function pushMessage(targetDiv, data, linkages){
+function createYouTubeElement(link) {
+	var iframe = document.createElement('iframe');
+	setAttributes(iframe, {"src": "https://www.youtube.com/embed/" + link + "?version=3&enablejsapi=1", "width": "640", "height": "385", "frameborder": "0", "allowFullScreen": ""});
+	return iframe;
+}
+
+function createGraphicEl(link, type)
+{
+	var el = document.createElement(type);
+	setAttributes(el, {"src": link.innerHTML, "height": "50%", "width": "50%"});
+	el.onclick = function() {
+		//place holder//
+	}
+	return el;
+}
+
+function setAttributes(element, attributes) {
+	for(var key in attributes) {
+		element.setAttribute(key, attributes[key]);
+ 	}
+}
+
+function pushMessage(targetDiv, data){
 	if(typeof targetDiv === 'undefined' || typeof targetDiv.childNodes === 'undefined') return; // fix this bandaid later :D //
 	//console.log(targetDiv);
-	
-	linkages = typeof linkages !== 'undefined' ? linkages : false;
-	
+
 	var chatLine = document.createElement('div');
 	chatLine.setAttribute('class', 'chatLine');
 	chatLine.setAttribute('nick', data.nick);
-	
-	if(linkages != false && linkages.channels.length > 0) chatLine.setAttribute('channels', JSON.stringify(linkages.channels));
-	if(linkages != false && linkages.imgs.length > 0) chatLine.setAttribute('imgs', JSON.stringify(linkages.imgs));
-	if(linkages != false && linkages.urls.length > 0) chatLine.setAttribute('urls', JSON.stringify(linkages.urls));
-	
+
 	if(targetDiv.childNodes.length % 2) addClass(chatLine, 'odd');
-	
-	if(data.admin){
-		addClass(chatLine, 'admin');
-	}else if(data.nick == '!'){
+
+	if(data.nick == '!'){
 		addClass(chatLine, 'warn');
 	}else if(data.nick == '*'){
 		addClass(chatLine, 'info');
 	}else if(data.nick == '<Server>'){
 		addClass(chatLine, 'shout');
 	}
-	
+
 	var leftSide = document.createElement('div');
 	leftSide.setAttribute('class', 'leftSide');
-	
+
 	var tripDom = document.createElement('span');
 	if(typeof data.trip !== 'undefined' && !data.isLastPoster){
-		if(data.admin){
-			tripDom.innerHTML = 'Admin';
-		}else{
 			tripDom.innerHTML = data.trip;
-		}
 	}
 	leftSide.appendChild(tripDom);
-	
+
 	var nickDom = document.createElement('b');
 	if(data.donator) addClass(nickDom, 'donator');
 	if(typeof data.trip !== 'undefined') nickDom.style.cssText = 'color:' + tripToColor(data.trip);
 	if(!data.isLastPoster) nickDom.innerHTML = data.nick;
 	leftSide.appendChild(nickDom);
-	
+
 	chatLine.appendChild(leftSide);
-	
+
 	var rightSide = document.createElement('div');
 	rightSide.setAttribute('class', 'rightSide');
-	
+
 	if(typeof data.text === 'undefined') data.text  = '';
-	
+
 	if(typeof data.mention !== 'undefined' && data.mention == true){
 		addClass(rightSide, 'mention');
 		if(!document.hasFocus()){
@@ -264,11 +290,11 @@ function pushMessage(targetDiv, data, linkages){
 	}else if(data.text.indexOf("@*") != -1){
 		addClass(rightSide, 'mention');
 	}
-	
+
 	rightSide.innerHTML = data.text;
-	
+
 	chatLine.appendChild(rightSide);
-	
+
 	targetDiv.appendChild(chatLine);
 }
 
