@@ -6,6 +6,7 @@ var ignoredUsers = [];
 var notifySound = new Audio('audio/notifi-sound.wav');
 var currentMenu = '';
 var odd = false;
+var unreadCount = 0;
 
 
 // global functions //
@@ -80,6 +81,8 @@ function chanIdToDiv(id){
 }
 
 function chat(data){
+	if(!document.hasFocus())
+		document.title = "(" + ++unreadCount + ") Lusyd Client";
 	pushMessage(chanIdToDiv(data.id), parseLinks(data));
 }
 
@@ -308,4 +311,10 @@ function removeClass(target, targetClass){
 	// setAttribute ~31% faster than classList.add() //
 	if(typeof target === 'undefined') return;
 	target.setAttribute('class', target.getAttribute('class').replace(' ' + targetClass, ''));
+}
+
+window.onfocus = function() {
+  unreadCount = 0;
+  document.title = "Lusyd Client";
+  document.getElementById('chatInput').focus();
 }
