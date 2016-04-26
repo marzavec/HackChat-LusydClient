@@ -5,6 +5,8 @@ var currentChannel = 0;
 var ignoredUsers = [];
 var notifySound = new Audio('audio/notifi-sound.wav');
 var currentMenu = '';
+var odd = false;
+var unreadCount = 0;
 
 
 // global functions //
@@ -79,6 +81,8 @@ function chanIdToDiv(id){
 }
 
 function chat(data){
+	if(!document.hasFocus())
+		document.title = "(" + ++unreadCount + ") Lusyd Client";
 	pushMessage(chanIdToDiv(data.id), parseLinks(data));
 }
 
@@ -189,7 +193,7 @@ function parseLinks(data){
 	var channels = newData.text.match(/\?\w+\s/ig);
 	var urls = newData.text.match(/((https?:\/\/|www)\S+)|(\w*.(com|org|net|moe)\b)/ig);
 	if (!urls) return newData;
-	
+
 	var youtubeLinks = urls.join(" ").match(/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*t/);
 
 	urls.forEach(function(link){
@@ -250,7 +254,8 @@ function pushMessage(targetDiv, data){
 	chatLine.setAttribute('class', 'chatLine');
 	chatLine.setAttribute('nick', data.nick);
 
-	if(targetDiv.childNodes.length % 2) addClass(chatLine, 'odd');
+	if(!data.isLastPoster) odd = !odd;
+	if(odd) addClass(chatLine, 'odd');
 
 	if(data.nick == '!'){
 		addClass(chatLine, 'warn');
@@ -266,7 +271,6 @@ function pushMessage(targetDiv, data){
 	var tripDom = document.createElement('span');
 	if(typeof data.trip !== 'undefined' && !data.isLastPoster){
 			tripDom.innerHTML = data.trip;
-	}
 	leftSide.appendChild(tripDom);
 
 	var nickDom = document.createElement('b');
@@ -274,7 +278,7 @@ function pushMessage(targetDiv, data){
 	if(typeof data.trip !== 'undefined') nickDom.style.cssText = 'color:' + tripToColor(data.trip);
 	if(!data.isLastPoster) nickDom.innerHTML = data.nick;
 	leftSide.appendChild(nickDom);
-
+	}
 	chatLine.appendChild(leftSide);
 
 	var rightSide = document.createElement('div');
@@ -307,4 +311,10 @@ function removeClass(target, targetClass){
 	// setAttribute ~31% faster than classList.add() //
 	if(typeof target === 'undefined') return;
 	target.setAttribute('class', target.getAttribute('class').replace(' ' + targetClass, ''));
+}
+
+window.onfocus = function() {
+  unreadCount = 0;
+  document.title = "Lusyd Client";
+  document.getElementById('chatInput').focus();
 }
