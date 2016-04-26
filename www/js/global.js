@@ -12,7 +12,7 @@ var unreadCount = 0;
 // global functions //
 
 function connectionList(conList){
-	console.log('got connectionList reply');
+	//console.log('got connectionList reply');
 
 	if(conList.data.length == 0){
 		lusydEngine.startNewConnection(roomPresets[0]);
@@ -33,7 +33,7 @@ function connectionList(conList){
 }
 
 function onCacheMsgData(msgData){
-	console.log(msgData);
+	//console.log(msgData);
 	msgData.data.forEach(function(chatEvent){
 		chatEvent.id = msgData.id;
 		if(typeof window[chatEvent.cmd] == 'function') window[chatEvent.cmd](chatEvent);
@@ -63,6 +63,15 @@ function onConnectionClosed(data){
 	}
 }
 
+function onContentData(data){
+	var contentDom = gui.genDom(data.type, '', '', '', [{name: 'src', value: data.data}], []);
+	if(data.type == 'video'){
+		contentDom.autoplay = true;
+		contentDom.controls = true;
+	}
+	document.getElementById(data.domID).appendChild(contentDom);
+}
+
 function makeID(){
 	var returnID = "";
 	var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -83,6 +92,7 @@ function chanIdToDiv(id){
 function chat(data){
 	if(!document.hasFocus())
 		document.title = "(" + ++unreadCount + ") Lusyd Client";
+
 	pushMessage(chanIdToDiv(data.id), parseLinks(data));
 }
 
@@ -133,12 +143,44 @@ function changeChannel(newChan){
 	connectedChannels[currentChannel].chanDiv.style.display = 'table';
 }
 
-function viewImage(img){
-	console.log('viewing ' + img);
+function viewImage(targetDom){
+	var imgContainer = gui.genDom('div', '', 'menu', '', [], []);
+	if(serverSettings['willProxy']){
+		lusydEngine.getContentURL(imgContainer.id, 'img', targetDom.innerHTML);
+
+	}else{
+		imgContainer.appendChild(gui.genDom('img', '', '', '', [{name: 'src', value: targetDom.innerHTML}], []));
+	}
+
+	imgContainer.appendChild(gui.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
+		document.body.removeChild(imgContainer);
+	}}]));
+
+	document.body.appendChild(imgContainer);
+	setTimeout( function(){ addClass(imgContainer, 'menuOpen'); }, 100);
 }
 
-function openURL(url){
-	console.log('opening ' + url);
+function viewVideo(targetDom){
+	var vidContainer = gui.genDom('div', '', 'menu', '', [], []);
+	if(serverSettings['willProxy']){
+		lusydEngine.getContentURL(vidContainer.id, 'video', targetDom.innerHTML);
+	}else{
+		var contentDom = gui.genDom('video', '', '', '', [{name: 'src', value: targetDom.innerHTML}], []);
+		contentDom.autoplay = true;
+		contentDom.controls = true;
+		vidContainer.appendChild(contentDom);
+	}
+
+	vidContainer.appendChild(gui.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
+		document.body.removeChild(vidContainer);
+	}}]));
+
+	document.body.appendChild(vidContainer);
+	setTimeout( function(){ addClass(vidContainer, 'menuOpen'); }, 100);
+}
+
+function openURL(targetDom){
+	console.log(targetDom);
 }
 
 function openConnectionByTitle(title){
@@ -188,7 +230,7 @@ function tripToColor(trip){
 }
 
 function parseLinks(data){
-	console.log(data);
+	//console.log(data);
 	var newData = JSON.parse(JSON.stringify(data));
 	var channels = newData.text.match(/\?\w+\s/ig);
 	var urls = newData.text.match(/((https?:\/\/|www)\S+)|(\w*.(com|org|net|moe)\b)/ig);
@@ -202,13 +244,13 @@ function parseLinks(data){
 
 		//Image link
 		if((/\.(jpe?g|png|gif|bmp)$/i).test(link)){
-			a.setAttribute("onclick", "this.appendChild(createGraphicEl(this, 'img'))");
+			a.setAttribute("onclick", "viewImage(this)");
 			newData.text = newData.text.replace(link, a.outerHTML);
 		}
 
 		//Video link
 		else if((/\.(webm|mp4|ogg|gifv)$/i).test(link)){
-			a.setAttribute("onclick", "this.appendChild(createGraphicEl(this, 'video'))");
+			a.setAttribute("onclick", "viewVideo(this)");
 			newData.text = newData.text.replace(link, a.outerHTML);
 		}
 

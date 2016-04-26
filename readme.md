@@ -15,7 +15,7 @@ There are a few chat clients floating around, however I did not find any that me
 - [x] *Logging*, log security events, errors, etc.
 - [ ] *Quick Nick Change*, quickly change nick across all channels; Marzavec -> afk_Marzavec
 - [ ] *LaTeX*, of course
-- [ ] *Proxy Simple Content*, if enabled the server will 
+- [x] *Proxy Simple Content*, if enabled the server will pull images and videos, then send them to the client, protecting your IP from annoying people.
 
 
 
@@ -31,7 +31,7 @@ Lusyd is designed to be run on a vps. It can also be run on your home machine wi
 Prerequisites:
 
 	- Install Node.js ( [https://nodejs.org/](https://nodejs.org/) )
-	
+
 	- Until a package.json is generated, you'll need to run: npm install ws http
 
 
@@ -59,7 +59,7 @@ Clone Git, modify config & initialize:
 		Invite user
 		Ignore user
 		AFK / change nick
-	
+
 	Module IO support (protocal is done)
 	Client timeout
 	Client tracking / force close
@@ -71,5 +71,3 @@ Clone Git, modify config & initialize:
 	Add LaTeX
 	Click notifiction -> show channel & Chat event count; "(3)"
 	Add "atelier-dune" css
-	Proxy content
-	Preprocess server->client settings

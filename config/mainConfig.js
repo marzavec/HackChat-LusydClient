@@ -6,7 +6,7 @@ mainConfig = {
 	clientUser: 'root', // username to access proxy //
 	clientPass: 'toor', // password to access proxy //
 	
-	nick: 'Lusyd', // nick to use in channels //
+	nick: '_Rut_', // nick to use in channels //
 	password: 'fucktripslol', // password to use in channels //
 	
 	httpPort: '6161', // http socket server port, for the browser to connect to //

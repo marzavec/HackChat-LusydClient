@@ -222,11 +222,21 @@ input, textarea {
 
 .menuLink{
 	margin: 0 auto;
-    display: table-cell;
-    margin-top: 10px;
-    margin-bottom: 10px;
-    padding: 16px;
+  display: table-cell;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding: 16px;
 	cursor: pointer;
+}
+
+.menu img{
+  max-height: 75vh;
+  max-width: 75vw;
+}
+
+.menu video{
+  max-height: 75vh;
+  max-width: 75vw;
 }
 
 select {
