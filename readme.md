@@ -63,11 +63,10 @@ Clone Git, modify config & initialize:
 	Module IO support (protocal is done)
 	Client timeout
 	Client tracking / force close
-	View image (litebox style)
 	Url support
 	Newline fix
-	Channel url support
+	Invite url support
 	Change nick / away
 	Add LaTeX
-	Click notifiction -> show channel & Chat event count; "(3)"
+	Click notifiction -> show channel
 	Add "atelier-dune" css
