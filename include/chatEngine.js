@@ -17,6 +17,7 @@ chatEngine = {
 	pingInterval: 0,
 	rejoinInterval: 0,
 	ignoredUsers: [],
+	lastPoster: '',
 
 
 	init: function(id, domain, wsPath, channel, pModule, nick, pass){
@@ -25,7 +26,6 @@ chatEngine = {
 		this.myWsPath = wsPath;
 		this.myChannel = channel;
 		this.protocolModule = pModule;
-		this.lastPoster = '';
 
 		this.myNick = typeof nick !== 'undefined' ? nick : mainConfig.nick;
 		this.myPass = typeof pass !== 'undefined' ? pass : mainConfig.password;
@@ -64,8 +64,8 @@ chatEngine = {
 			if(mainConfig.cacheEnabled) cacheControl.add(my.myID, data);
 
 			if(data.cmd == 'chat'){
-				data.isLastPoster = (this.lastPoster == data.nick);
-				this.lastPoster = data.nick;
+				data.isLastPoster = (my.lastPoster == data.nick);
+				my.lastPoster = data.nick;
 				if(data.text.toLowerCase().indexOf(my.myNick.toLowerCase()) != -1) data.mention = true;
 				var forbidden = {
 				'&':'&amp;',
