@@ -263,8 +263,10 @@ function tripToColor(trip){
 function parseLinks(data){
 	var newData = JSON.parse(JSON.stringify(data));
 
-	var channels = newData.text.match(/\?(\S+)/);
+	var channels = newData.text.match(/\s\?(\w+)\s?/gmi);
+	console.log(channels);
 	if(channels) channels.forEach(function(link){
+		link = link.replace(' ', '');
 		if(link.substr(0, 1) != '?') return;
 		var a = document.createElement('a');
 		a.innerHTML = link;
@@ -302,7 +304,7 @@ function parseLinks(data){
 			}
 
 			else {
-				console.log(link);
+				console.log(link.replace(/(<([^>]+)>)/ig, ''));
 				a.setAttribute("href", link);
 				a.setAttribute("target", "_blank");
 				newData.text = data.text.replace(link, a.outerHTML);
