@@ -328,6 +328,7 @@ function setAttributes(element, attributes){
 }
 
 function pushMessage(targetDiv, data){
+	console.log(data);
 	if(typeof targetDiv === 'undefined' || typeof targetDiv.childNodes === 'undefined') return; // fix this bandaid later :D //
 
 	var chatLine = document.createElement('div');
@@ -350,15 +351,15 @@ function pushMessage(targetDiv, data){
 
 	var tripDom = document.createElement('span');
 	if(typeof data.trip !== 'undefined' && !data.isLastPoster){
-			tripDom.innerHTML = data.trip;
-	leftSide.appendChild(tripDom);
-
+		tripDom.innerHTML = data.trip;
+		leftSide.appendChild(tripDom);
+	}
+	
 	var nickDom = document.createElement('b');
 	if(data.donator) addClass(nickDom, 'donator');
 	if(typeof data.trip !== 'undefined') nickDom.style.cssText = 'color:' + tripToColor(data.trip);
 	if(!data.isLastPoster) nickDom.innerHTML = data.nick;
 	leftSide.appendChild(nickDom);
-	}
 	chatLine.appendChild(leftSide);
 
 	var rightSide = document.createElement('div');
