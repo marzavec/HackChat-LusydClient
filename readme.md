@@ -52,21 +52,17 @@ Clone Git, modify config & initialize:
 
 #To-do:
 	Add scrolling support
+	Module IO support (protocol is done)
+	Client timeout
+	Client tracking / force close
+	Url support
+	Change nick / away
+	Add LaTeX
+	Click notifiction -> show channel
+	Add "atelier-dune" css
 	Finish Menus:
-		Close connection
 		Alt-Open connection
 		Change style
 		Invite user
 		Ignore user
 		AFK / change nick
-
-	Module IO support (protocal is done)
-	Client timeout
-	Client tracking / force close
-	Url support
-	Newline fix
-	Invite url support
-	Change nick / away
-	Add LaTeX
-	Click notifiction -> show channel
-	Add "atelier-dune" css

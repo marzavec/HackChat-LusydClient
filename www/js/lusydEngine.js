@@ -15,15 +15,6 @@ var lusydEngine = {
 		this.ws.onopen = function(){
 			if(my.firstConnect){
 				my.send({cmd: 'getConnectionList'});
-
-				setTimeout(function(){ gui.openGates(); }, 500);
-
-				setTimeout(function(){
-					document.body.appendChild(gui.chatInput);
-					document.body.appendChild(gui.tabHolder);
-					connectedChannels[currentChannel].chanDiv.style.display = 'table';
-				}, 900);
-
 				my.firstConnect = false;
 			}else{
 				my.send({cmd: 'ping'});

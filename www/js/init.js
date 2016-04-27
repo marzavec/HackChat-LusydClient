@@ -4,6 +4,12 @@ if(Notification && Notification.permission !== "granted") Notification.requestPe
 
 gui.init();
 
+window.onfocus = function() {
+  unreadCount = 0;
+  document.title = "Lusyd Client";
+  document.getElementById('chatInput').focus();
+}
+
 lusydEngine.init();
 
 /*
@@ -16,18 +22,18 @@ touchControl.bindEvent(window, 'touchend', function(event){
 		touchControl.ignoreGlobal = false;
 		return;
 	}
-	
+
 	var currentNode = document.elementFromPoint(event.changedTouches[0].clientX, event.changedTouches[0].clientY);
 	var notFound = true;
 	while(notFound){
 		if(typeof currentNode === 'undefined' || currentNode == null) break;
-		
+
 		if(typeof currentNode.getAttribute !== 'undefined' && currentNode.getAttribute('class') != null && currentNode.getAttribute('class').split(' ')[0] == 'chatLine'){
 			notFound = false;
 			gui.popLineMenu(currentNode);
 			break;
 		}
-		
+
 		currentNode = currentNode.parentNode;
 	}
 });

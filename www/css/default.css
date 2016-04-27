@@ -11,6 +11,14 @@ body {
 	letter-spacing: 2px;
 }
 
+a{
+	color: #FFF;
+}
+
+a:hover{
+	color: #EEE;
+}
+
 #menuBtn{
 	color: #AF5B1D;
 	font-size: 52px;
@@ -22,7 +30,7 @@ body {
 }
 
 .tabBtn{
-	
+
 }
 
 .tabBtn:hover{
@@ -71,19 +79,19 @@ input, textarea {
 }
 
 .me{
-	
+
 }
 
 .warn{
-	
+
 }
 
 .info{
-	
+
 }
 
 .shout{
-	
+
 }
 
 .mention{
@@ -92,7 +100,7 @@ input, textarea {
 
 /* menu css */
 .menu{
-	
+
 }
 
 .menuOpen{
@@ -100,7 +108,7 @@ input, textarea {
 }
 
 .menuLink{
-	
+
 }
 
 .menuLink:hover{

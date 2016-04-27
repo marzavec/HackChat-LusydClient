@@ -75,6 +75,10 @@ chatEngine = {
 				data.text = data.text.replace(/(&|<|>)/g, function(matched){
 					return forbidden[matched];
 				});
+
+				data.text = data.text.replace("\n", '<br>');
+			}else{
+				my.lastPoster = '';
 			}
 
 			data.id = my.myID;

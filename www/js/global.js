@@ -12,8 +12,6 @@ var unreadCount = 0;
 // global functions //
 
 function connectionList(conList){
-	//console.log('got connectionList reply');
-
 	if(conList.data.length == 0){
 		lusydEngine.startNewConnection(roomPresets[0]);
 		return;
@@ -30,6 +28,14 @@ function connectionList(conList){
 
 		lusydEngine.getCachedMsgs(meta.id);
 	});
+
+	setTimeout(function(){ gui.openGates(); }, 500);
+
+	setTimeout(function(){
+		document.body.appendChild(gui.chatInput);
+		document.body.appendChild(gui.tabHolder);
+		connectedChannels[currentChannel].chanDiv.style.display = 'table';
+	}, 1200);
 }
 
 function onCacheMsgData(msgData){
@@ -47,6 +53,16 @@ function onNewConnection(data){
 	gui.addConnectionTab(data.id, data.domain, data.channel);
 
 	changeChannel(data.id);
+
+	if(!gui.gatesOpen){
+		setTimeout(function(){ gui.openGates(); }, 500);
+
+		setTimeout(function(){
+			document.body.appendChild(gui.chatInput);
+			document.body.appendChild(gui.tabHolder);
+			connectedChannels[currentChannel].chanDiv.style.display = 'table';
+		}, 1200);
+	}
 }
 
 function onConnectionClosed(data){
@@ -98,7 +114,7 @@ function chat(data){
 
 function info(data){
 	data.nick = '*';
-	pushMessage(chanIdToDiv(data.id), data);
+	pushMessage(chanIdToDiv(data.id), parseLinks(data));
 }
 
 function warn(data){
@@ -143,11 +159,26 @@ function changeChannel(newChan){
 	connectedChannels[currentChannel].chanDiv.style.display = 'table';
 }
 
+function joinChanel(targetDom){
+	var domain = connectedChannels[currentChannel].domain;
+	var wsUrl = '';
+	var protocol = '';
+	for(var i = 0, j = roomPresets.length; i < j; i++){
+		if(roomPresets[i].domain == domain){
+			wsUrl = roomPresets[i].wsPath;
+			protocol = roomPresets[i].protocol;
+			break;
+		}
+	}
+
+	lusydEngine.startNewConnection(domain, wsUrl, targetDom.innerHTML.substr(1), protocol);
+	console.log(targetDom.innerHTML);
+}
+
 function viewImage(targetDom){
 	var imgContainer = gui.genDom('div', '', 'menu', '', [], []);
 	if(serverSettings['willProxy']){
 		lusydEngine.getContentURL(imgContainer.id, 'img', targetDom.innerHTML);
-
 	}else{
 		imgContainer.appendChild(gui.genDom('img', '', '', '', [{name: 'src', value: targetDom.innerHTML}], []));
 	}
@@ -230,41 +261,54 @@ function tripToColor(trip){
 }
 
 function parseLinks(data){
-	//console.log(data);
 	var newData = JSON.parse(JSON.stringify(data));
-	var channels = newData.text.match(/\?\w+\s/ig);
-	var urls = newData.text.match(/((https?:\/\/|www)\S+)|(\w*.(com|org|net|moe)\b)/ig);
-	if (!urls) return newData;
 
-	var youtubeLinks = urls.join(" ").match(/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*t/);
-
-	urls.forEach(function(link){
+	var channels = newData.text.match(/\?(\S+)/);
+	if(channels) channels.forEach(function(link){
+		if(link.substr(0, 1) != '?') return;
 		var a = document.createElement('a');
 		a.innerHTML = link;
-
-		//Image link
-		if((/\.(jpe?g|png|gif|bmp)$/i).test(link)){
-			a.setAttribute("onclick", "viewImage(this)");
-			newData.text = newData.text.replace(link, a.outerHTML);
-		}
-
-		//Video link
-		else if((/\.(webm|mp4|ogg|gifv)$/i).test(link)){
-			a.setAttribute("onclick", "viewVideo(this)");
-			newData.text = newData.text.replace(link, a.outerHTML);
-		}
-
-		//Youtube
-
-		else if(youtubeLinks){
-			a.setAttribute("onclick", "this.appendChild(createGraphicEl(youtubeLinks[7]))");
-			newData.text = newData.text.replace(link, a.outerHTML);
-			//https://www.googleapis.com/youtube/v3/videos?key=YOUR_API_KEY&part=snippet&id=VIDEO_ID
-		}
-
-		//Normal Link or Channel
-		setAttributes(a, {"href": link, "target": "_blank"});
+		a.setAttribute("onclick", "joinChanel(this)");
+		newData.text = newData.text.replace(link, a.outerHTML);
 	});
+
+
+	var urls = newData.text.match(/((https?:\/\/|www)\S+)|(\w*.(com|org|net|moe)\b)/ig);
+	if(urls){
+		var youtubeLinks = urls.join(" ").match(/^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*t/);
+
+		urls.forEach(function(link){
+			var a = document.createElement('a');
+			a.innerHTML = link;
+
+			//Image link
+			if((/\.(jpe?g|png|gif|bmp)$/i).test(link)){
+				a.setAttribute("onclick", "viewImage(this)");
+				newData.text = newData.text.replace(link, a.outerHTML);
+			}
+
+			//Video link
+			else if((/\.(webm|mp4|ogg|gifv)$/i).test(link)){
+				a.setAttribute("onclick", "viewVideo(this)");
+				newData.text = newData.text.replace(link, a.outerHTML);
+			}
+
+			//Youtube
+
+			else if(youtubeLinks){
+				a.setAttribute("onclick", "this.appendChild(createGraphicEl(youtubeLinks[7]))");
+				newData.text = newData.text.replace(link, a.outerHTML);
+				//https://www.googleapis.com/youtube/v3/videos?key=YOUR_API_KEY&part=snippet&id=VIDEO_ID
+			}
+
+			else {
+				console.log(link);
+				a.setAttribute("href", link);
+				a.setAttribute("target", "_blank");
+				newData.text = data.text.replace(link, a.outerHTML);
+			}
+		});
+	}
 	return newData;
 }
 
@@ -353,10 +397,4 @@ function removeClass(target, targetClass){
 	// setAttribute ~31% faster than classList.add() //
 	if(typeof target === 'undefined') return;
 	target.setAttribute('class', target.getAttribute('class').replace(' ' + targetClass, ''));
-}
-
-window.onfocus = function() {
-  unreadCount = 0;
-  document.title = "Lusyd Client";
-  document.getElementById('chatInput').focus();
 }

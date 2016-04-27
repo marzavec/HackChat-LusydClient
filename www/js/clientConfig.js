@@ -2,7 +2,7 @@
 
 */
 roomPresets.push({
-					title: 'ToastyStoemp - Programming',
+					title: 'ToastyStoemp - DevTest',
 					domain: 'chat.toastystoemp.com',
 					wsPath: 'wss://chat.toastystoemp.com/chatws',
 					channel: 'devtest',
@@ -32,7 +32,7 @@ roomPresets.push({
 					channel: 'programming',
 					protocol: 'vanilla'
 				});
-				
+
 roomPresets.push({
 					title: 'DankNet - Programming',
 					domain: 'danknet.xyz',
