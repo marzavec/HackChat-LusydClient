@@ -21,7 +21,7 @@ function connectionList(conList){
 	conList.data.forEach(function(meta){
 		var newCon = connectedChannels.push({ id: meta.id, domain: meta.domain, channel: meta.channel, chanDiv: gui.genDom('div', '', 'chatOutput', '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>') }) - 1;
 		document.body.appendChild(connectedChannels[newCon].chanDiv);
-
+		touchControl.addMouseScrolling(connectedChannels[newCon].chanDiv);
 		gui.addConnectionTab(meta.id, meta.domain, meta.channel);
 
 		connectedChannels[newCon].chanDiv.style.display = 'none';
@@ -39,7 +39,6 @@ function connectionList(conList){
 }
 
 function onCacheMsgData(msgData){
-	//console.log(msgData);
 	msgData.data.forEach(function(chatEvent){
 		chatEvent.id = msgData.id;
 		if(typeof window[chatEvent.cmd] == 'function') window[chatEvent.cmd](chatEvent);
@@ -49,7 +48,7 @@ function onCacheMsgData(msgData){
 function onNewConnection(data){
 	var newCon = connectedChannels.push({ id: data.id, domain: data.domain, channel: data.channel, chanDiv: gui.genDom('div', '', 'chatOutput', '<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>') }) - 1;
 	document.body.appendChild(connectedChannels[newCon].chanDiv);
-
+	touchControl.addMouseScrolling(connectedChannels[newCon].chanDiv);
 	gui.addConnectionTab(data.id, data.domain, data.channel);
 
 	changeChannel(data.id);
@@ -172,7 +171,6 @@ function joinChanel(targetDom){
 	}
 
 	lusydEngine.startNewConnection(domain, wsUrl, targetDom.innerHTML.substr(1), protocol);
-	console.log(targetDom.innerHTML);
 }
 
 function viewImage(targetDom){
@@ -208,10 +206,6 @@ function viewVideo(targetDom){
 
 	document.body.appendChild(vidContainer);
 	setTimeout( function(){ addClass(vidContainer, 'menuOpen'); }, 100);
-}
-
-function openURL(targetDom){
-	console.log(targetDom);
 }
 
 function openConnectionByTitle(title){
@@ -264,7 +258,6 @@ function parseLinks(data){
 	var newData = JSON.parse(JSON.stringify(data));
 
 	var channels = newData.text.match(/\s\?(\w+)\s?/gmi);
-	console.log(channels);
 	if(channels) channels.forEach(function(link){
 		link = link.replace(' ', '');
 		if(link.substr(0, 1) != '?') return;
@@ -304,7 +297,6 @@ function parseLinks(data){
 			}
 
 			else {
-				console.log(link.replace(/(<([^>]+)>)/ig, ''));
 				a.setAttribute("href", link);
 				a.setAttribute("target", "_blank");
 				newData.text = data.text.replace(link, a.outerHTML);

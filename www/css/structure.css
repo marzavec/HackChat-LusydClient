@@ -119,18 +119,19 @@ input, textarea {
 }
 
 #chatInput{
-	position: absolute;
-	bottom: 0;
-	left: 0;
-    right: 0;
-	width: 75%;
-	height: 52px;
-	margin: 0 auto;
-	margin-left: auto;
-    margin-right: auto;
-    overflow: hidden;
-	padding: 1em;
-	padding-bottom: 0em;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 75%;
+  height: 52px;
+  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
+  overflow: hidden;
+  padding: 1em;
+  padding-bottom: 0em;
+  z-index: 999;
 }
 
 /* chat display css */

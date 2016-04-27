@@ -10,7 +10,6 @@ lusydCore = {
 	},
 
 	getConnectionList: function(socket, data){
-		console.log('got connectionList request');
 		var connectionMeta = [];
 
 		for(var i = 0, j = this.roomConnections.length; i < j; i++){
