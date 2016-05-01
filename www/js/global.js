@@ -328,7 +328,7 @@ function setAttributes(element, attributes){
 }
 
 function pushMessage(targetDiv, data){
-	console.log(data);
+	//console.log(data);
 	if(typeof targetDiv === 'undefined' || typeof targetDiv.childNodes === 'undefined') return; // fix this bandaid later :D //
 
 	var chatLine = document.createElement('div');
@@ -354,7 +354,7 @@ function pushMessage(targetDiv, data){
 		tripDom.innerHTML = data.trip;
 		leftSide.appendChild(tripDom);
 	}
-	
+
 	var nickDom = document.createElement('b');
 	if(data.donator) addClass(nickDom, 'donator');
 	if(typeof data.trip !== 'undefined') nickDom.style.cssText = 'color:' + tripToColor(data.trip);

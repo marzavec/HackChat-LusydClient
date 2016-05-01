@@ -99,7 +99,26 @@ chatEngine = {
 
 	shutdown: function(){
 		this.shuttingDown = true;
+		clearInterval(this.pingInterval);
 		this.ws.close();
+	},
+
+	changeNick: function(nickData, delay){
+		if(typeof delay !== 'undefined'){
+			console.log('delayed change');
+			console.log(delay * 2000);
+			var my = this;
+			setTimeout(function(){ my.changeNick(nickData); }, delay * 2000);
+			return;
+		}
+		
+		var newNick = nickData.nick;
+		if(typeof nickData.append !== 'undefined' && nickData.append == true) newNick = this.myNick + nickData.nick;
+		if(typeof nickData.prepend !== 'undefined' && nickData.prepend == true) newNick = nickData.nick + this.myNick;
+
+		this.myNick = newNick;
+		this.shutdown();
+		this.join();
 	},
 
 	temp: function(){

@@ -13,7 +13,7 @@ There are a few chat clients floating around, however I did not find any that me
 - [x] *Module Based*, mutate the protocal, output or input using modules. Found a new server you want to connect to? No lengthy recoding needed; just make a new module. Text effects? Module.
 - [x] *Secure*, to use the client; you'll need to enter credentials. (Security needs to be made better, its bare bones atm)
 - [x] *Logging*, log security events, errors, etc.
-- [ ] *Quick Nick Change*, quickly change nick across all channels; Marzavec -> afk_Marzavec
+- [x] *Quick Nick Change*, quickly change nick across all channels; Marzavec -> afk_Marzavec
 - [ ] *LaTeX*, of course
 - [x] *Proxy Simple Content*, if enabled the server will pull images and videos, then send them to the client, protecting your IP from annoying people.
 
@@ -51,13 +51,12 @@ Clone Git, modify config & initialize:
 
 
 #To-do:
-	Module IO support (protocol is done)
 	Client timeout
 	Client tracking / force close
-	Change nick / away
 	Add LaTeX
 	Click notifiction -> show channel
 	Add "atelier-dune" css
+	Tab auto complete
 	Finish Menus:
 		Alt-Open connection
 		Change style

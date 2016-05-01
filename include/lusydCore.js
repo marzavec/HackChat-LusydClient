@@ -13,7 +13,7 @@ lusydCore = {
 		var connectionMeta = [];
 
 		for(var i = 0, j = this.roomConnections.length; i < j; i++){
-			connectionMeta.push({'id': this.roomConnections[i].myID, 'domain': this.roomConnections[i].myDomain, 'channel': this.roomConnections[i].myChannel })
+			connectionMeta.push({'id': this.roomConnections[i].myID, 'domain': this.roomConnections[i].myDomain, 'channel': this.roomConnections[i].myChannel });
 		}
 
 		wsServer.sendTo(socket, { 'cmd': 'connectionList', 'data': connectionMeta });
@@ -117,6 +117,20 @@ lusydCore = {
 		for(var i = 0, j = this.roomConnections.length; i < j; i++){
 			if(this.roomConnections[i].myID == data.id){
 				this.roomConnections[i].say(data.text);
+			}
+		}
+	},
+
+	changeNick: function(socket, data){
+		var changedServers = [];
+
+		for(var i = 0, j = this.roomConnections.length; i < j; i++){
+			if(typeof changedServers[this.roomConnections[i].myWsPath] === 'undefined'){
+				changedServers[this.roomConnections[i].myWsPath] = 1;
+				this.roomConnections[i].changeNick(data);
+			}else{
+				this.roomConnections[i].changeNick(data, changedServers[this.roomConnections[i].myWsPath]);
+				changedServers[this.roomConnections[i].myWsPath]++;
 			}
 		}
 	},

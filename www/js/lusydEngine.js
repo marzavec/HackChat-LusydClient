@@ -64,8 +64,21 @@ var lusydEngine = {
 		this.send({cmd: 'getContent', domID: domID, type: contentType, url: url });
 	},
 
+	changeNick: function(newNick, prepend, append){
+		var data = { cmd: 'changeNick', nick: newNick };
+		if(typeof prepend !== 'undefined' && prepend == true) data.prepend = true;
+		if(typeof append !== 'undefined' && append == true) data.append = true;
+
+		this.send(data);
+	},
+
 	sendChat: function(text, id){
 		id = typeof id !== 'undefined' ? id : connectedChannels[currentChannel].id;
+
+		for(var i = 0, j = modules.io.length; i < j; i++){
+			text = modules.io[i](text);
+		}
+		if(text == false) return;
 
 		this.send({ cmd: 'chatTo', id: id, text: text});
 	},
