@@ -87,6 +87,16 @@ function onContentData(data){
 	document.getElementById(data.domID).appendChild(contentDom);
 }
 
+function onClientList(data){
+	console.log(data);
+	gui.rebuildClientsMenu(data);
+	gui.popMenu('clients');
+}
+
+function onForward(data){
+	window.location = data.destination;
+}
+
 function makeID(){
 	var returnID = "";
 	var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

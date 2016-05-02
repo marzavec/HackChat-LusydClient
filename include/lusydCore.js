@@ -136,11 +136,25 @@ lusydCore = {
 	},
 
 	getClientList: function(socket, data){
-		for(var client of wsServer.serverSocket.clients) console.log(client.upgradeReq.headers['sec-websocket-key']);
+		var clientData = [];
+
+		for(var client of wsServer.serverSocket.clients){
+			clientData.push({ 'id': client.upgradeReq.headers['sec-websocket-key'], 'ip': client.upgradeReq.connection.remoteAddress });
+		}
+
+		wsServer.sendTo(socket, { 'cmd': 'onClientList', 'clientList': clientData, thisID: socket.upgradeReq.headers['sec-websocket-key'] });
 	},
 
 	killTargetClient: function(socket, data){
+		for(var client of wsServer.serverSocket.clients){
+			if(client.upgradeReq.headers['sec-websocket-key'] == data.targetid){
+				httpServer.authedIPs.splice(httpServer.authedIPs.indexOf(client.upgradeReq.connection.remoteAddress), 1);
+				wsServer.sendTo(client, { 'cmd': 'onForward', 'destination': 'https://www.google.com/' });
+				client.close();
 
+				return;
+			}
+		}
 	},
 
 	temp: function(){

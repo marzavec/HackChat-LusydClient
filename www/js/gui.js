@@ -54,6 +54,11 @@ var gui = {
 			gui.popMenu('clear');
 		}}]));
 
+		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon', '&#61862;', [{name: 'title', value: 'Manage Clients'}], [{eventName: 'mouseup', func: function(event){
+			lusydEngine.send({cmd: 'getClientList'});
+			closeCurrentMenu();
+		}}]));
+
 		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
 			closeCurrentMenu();
 		}}]));
@@ -144,6 +149,13 @@ var gui = {
 			closeCurrentMenu();
 		}}]));
 
+		// build client menu //
+		this.addToMenu('clients', 1, this.genDom('div', '', 'menuLabel', 'Refreshing. . .', [], []));
+
+		this.addToMenu('clients', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
+			closeCurrentMenu();
+		}}]));
+
 		// build clear menu //
 		this.addToMenu('clear', 1, this.genDom('div', '', 'menuLabel', 'Clear menu under development', [], []));
 
@@ -184,6 +196,45 @@ var gui = {
 		});
 
 		return returnDom;
+	},
+
+	rebuildClientsMenu: function(data){
+		this.menus['clients'].innerHTML = '';
+		this.menus['clients'].appendChild(this.genDom('div', '', 'menuRow'));
+
+		if(typeof data === 'undefined'){
+			this.addToMenu('clients', 1, this.genDom('div', '', 'menuLabel', 'Refreshing. . .', [], []));
+
+			this.addToMenu('clients', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
+				closeCurrentMenu();
+			}}]));
+			return;
+		}
+
+		if(data.clientList.length == 1){
+			this.addToMenu('clients', 1, this.genDom('div', '', 'menuLabel', 'You are the only one connected.', [], []));
+
+			this.addToMenu('clients', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
+				gui.rebuildClientsMenu();
+				closeCurrentMenu();
+			}}]));
+			return;
+		}
+
+		this.addToMenu('clients', 1, this.genDom('div', '', 'menuLabel', 'Click to force client disconnect:', [], []));
+
+		data.clientList.forEach(function(clientData){
+			if(clientData.id != data.thisID) gui.addToMenu('clients', 1, gui.genDom('div', '', 'menuLink', 'ID: ' + clientData.id.substr(0, 7) + ' IP: ' + clientData.ip, [{name: 'targetid', value: clientData.id }], [{eventName: 'mouseup', func: function(event){
+				console.log(this.getAttribute('targetid'));
+				lusydEngine.send({ cmd: 'killTargetClient', targetid: this.getAttribute('targetid') });
+				closeCurrentMenu();
+				gui.rebuildClientsMenu();
+			}}]));
+		});
+
+		this.addToMenu('clients', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
+			closeCurrentMenu();
+		}}]));
 	},
 
 	openGates: function(){

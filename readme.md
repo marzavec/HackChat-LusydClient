@@ -52,7 +52,6 @@ Clone Git, modify config & initialize:
 
 #To-do:
 	Client timeout
-	Client tracking / force close
 	Add LaTeX
 	Click notifiction -> show channel
 	Add "atelier-dune" css
