@@ -1,5 +1,5 @@
 modules.io.push(function(data){
-  if(typeof data.cmd !== 'undefined' || ata.substr(0, 1) != '/') return data;
+  if(typeof data.cmd !== 'undefined' || data.substr(0, 1) != '/') return data;
 
   var cmdArray = data.split(' ');
   cmdArray[0] = cmdArray[0].substr(1);
