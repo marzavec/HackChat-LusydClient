@@ -135,6 +135,14 @@ lusydCore = {
 		}
 	},
 
+	getClientList: function(socket, data){
+		for(var client of wsServer.serverSocket.clients) console.log(client.upgradeReq.headers['sec-websocket-key']);
+	},
+
+	killTargetClient: function(socket, data){
+
+	},
+
 	temp: function(){
 
 	}
