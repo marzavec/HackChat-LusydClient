@@ -10,7 +10,9 @@ var framework = {
 				'js/modules.js',
 
 				// module files //
-				'modules/coreIO.js',
+				'modules/afk.js',
+				'modules/nick.js',
+				'modules/autoReply.js',
 
 				// initialize lusyd client //
 				'js/init.js'

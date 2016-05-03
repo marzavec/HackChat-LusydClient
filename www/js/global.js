@@ -1,4 +1,4 @@
-/* setup global vars */
+// setup global vars //
 var roomPresets = [];
 var connectedChannels = [];
 var currentChannel = 0;
@@ -7,7 +7,7 @@ var notifySound = new Audio('audio/notifi-sound.wav');
 var currentMenu = '';
 var odd = false;
 var unreadCount = 0;
-
+var users = [];
 
 // global functions //
 
@@ -119,6 +119,11 @@ function chat(data){
 		document.title = "(" + ++unreadCount + ") Lusyd Client";
 
 	pushMessage(chanIdToDiv(data.id), parseLinks(data));
+
+	for(var i = 0, j = modules.out.length; i < j; i++){
+		data = modules.out[i](data);
+		if(data == false) return;
+	}
 }
 
 function info(data){
@@ -131,24 +136,25 @@ function warn(data){
 	pushMessage(chanIdToDiv(data.id), data);
 }
 
-function onlineSet(data){
-	data.nick = '*';
-	pushMessage(chanIdToDiv(data.id), data);
-}
-
 function onlineAdd(data){
+	users[data.id].push(data.nick);
+
 	data.text = data.nick + ' joined';
 	data.nick = '*';
 	pushMessage(chanIdToDiv(data.id), data);
 }
 
 function onlineRemove(data){
+	users[data.id].splice(users[data.id].indexOf(data.nick), 1);
+
 	data.text = data.nick + ' left';
 	data.nick = '*';
 	pushMessage(chanIdToDiv(data.id), data);
 }
 
 function onlineSet(data){
+	users[data.id] = data.nicks;
+
 	data.text = 'Current Users: ' + data.nicks.join(', ');
 	data.nick = '*';
 	pushMessage(chanIdToDiv(data.id), data);

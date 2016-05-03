@@ -1,3 +1,4 @@
 var modules = {
-	io:[]
+	in: [],
+	out: []
 }

@@ -66,7 +66,10 @@ chatEngine = {
 			if(data.cmd == 'chat'){
 				data.isLastPoster = (my.lastPoster == data.nick);
 				my.lastPoster = data.nick;
+
 				if(data.text.toLowerCase().indexOf(my.myNick.toLowerCase()) != -1) data.mention = true;
+				if(data.nick == my.myNick) data.isMe = true;
+
 				var forbidden = {
 				'&':'&amp;',
 				'<':'&#60;',
@@ -111,10 +114,11 @@ chatEngine = {
 			setTimeout(function(){ my.changeNick(nickData); }, delay * 2000);
 			return;
 		}
-		
+
 		var newNick = nickData.nick;
 		if(typeof nickData.append !== 'undefined' && nickData.append == true) newNick = this.myNick + nickData.nick;
 		if(typeof nickData.prepend !== 'undefined' && nickData.prepend == true) newNick = nickData.nick + this.myNick;
+		if(typeof nickData.remove !== 'undefined' && nickData.remove == true) newNick = this.myNick.replace(new RegExp(nickData.nick, 'g'), '');
 
 		this.myNick = newNick;
 		this.shutdown();

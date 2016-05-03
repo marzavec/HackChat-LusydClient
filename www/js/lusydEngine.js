@@ -64,10 +64,11 @@ var lusydEngine = {
 		this.send({cmd: 'getContent', domID: domID, type: contentType, url: url });
 	},
 
-	changeNick: function(newNick, prepend, append){
+	changeNick: function(newNick, prepend, append, remove){
 		var data = { cmd: 'changeNick', nick: newNick };
 		if(typeof prepend !== 'undefined' && prepend == true) data.prepend = true;
 		if(typeof append !== 'undefined' && append == true) data.append = true;
+		if(typeof remove !== 'undefined' && remove == true) data.remove = true;
 
 		this.send(data);
 	},
@@ -75,10 +76,10 @@ var lusydEngine = {
 	sendChat: function(text, id){
 		id = typeof id !== 'undefined' ? id : connectedChannels[currentChannel].id;
 
-		for(var i = 0, j = modules.io.length; i < j; i++){
-			text = modules.io[i](text);
+		for(var i = 0, j = modules.in.length; i < j; i++){
+			text = modules.in[i](text);
+			if(text == false) return;
 		}
-		if(text == false) return;
 
 		this.send({ cmd: 'chatTo', id: id, text: text});
 	},
