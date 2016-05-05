@@ -121,7 +121,7 @@ function chat(data, isCached){
 
 	pushMessage(chanIdToDiv(data.id), parseLinks(data));
 
-	if(typeof isCached === 'undefined' || isCached == false) return;
+	if(typeof isCached !== 'undefined' && isCached == false) return;
 
 	for(var i = 0, j = modules.out.length; i < j; i++){
 		data = modules.out[i](data);
