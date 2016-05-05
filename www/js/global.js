@@ -139,28 +139,49 @@ function warn(data){
 	pushMessage(chanIdToDiv(data.id), data);
 }
 
-function onlineAdd(data){
-	users[data.id].push(data.nick);
+function onlineAdd(data, isCached){
+	if(users[data.id].indexOf(data.nick) == -1) users[data.id].push(data.nick);
 
 	data.text = data.nick + ' joined';
 	data.nick = '*';
 	pushMessage(chanIdToDiv(data.id), data);
+
+	if(typeof isCached !== 'undefined' && isCached == true) return;
+
+	for(var i = 0, j = modules.out.length; i < j; i++){
+		data = modules.out[i](data);
+		if(data == false) return;
+	}
 }
 
-function onlineRemove(data){
+function onlineRemove(data, isCached){
 	users[data.id].splice(users[data.id].indexOf(data.nick), 1);
 
 	data.text = data.nick + ' left';
 	data.nick = '*';
 	pushMessage(chanIdToDiv(data.id), data);
+
+	if(typeof isCached !== 'undefined' && isCached == true) return;
+
+	for(var i = 0, j = modules.out.length; i < j; i++){
+		data = modules.out[i](data);
+		if(data == false) return;
+	}
 }
 
-function onlineSet(data){
+function onlineSet(data, isCached){
 	users[data.id] = data.nicks;
 
 	data.text = 'Current Users: ' + data.nicks.join(', ');
 	data.nick = '*';
 	pushMessage(chanIdToDiv(data.id), data);
+
+	if(typeof isCached !== 'undefined' && isCached == true) return;
+
+	for(var i = 0, j = modules.out.length; i < j; i++){
+		data = modules.out[i](data);
+		if(data == false) return;
+	}
 }
 
 function changeChannel(newChan){

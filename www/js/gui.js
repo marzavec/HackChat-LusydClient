@@ -14,6 +14,26 @@ var gui = {
 					this.value = '';
 
 					return false;
+				}else if(event.keyCode == 9 && !event.shiftKey){
+					event.preventDefault();
+
+					if(this.value.lastIndexOf('@') == -1) return;
+
+					var selStart = this.selectionStart;
+					var search = this.value.substr(this.value.lastIndexOf('@') + 1, selStart - (this.value.lastIndexOf('@') + 1)).toLowerCase();
+					if(search == '') return;
+
+					var searchLen = search.length;
+					var results = [];
+					users[connectedChannels[currentChannel].id].forEach(function(nick){
+						if(nick.substr(0, searchLen).toLowerCase() == search) results.push(nick);
+					});
+
+					if(results.length == 1){
+						this.value = this.value.substr(0, selStart) + (results[0].substr(searchLen)) + this.value.substr(selStart);
+						this.selectionStart = selStart + (results[0].length - searchLen);
+						this.selectionEnd = selStart + (results[0].length - searchLen);
+					}
 				}
 			}}]);
 

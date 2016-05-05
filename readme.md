@@ -55,7 +55,6 @@ Clone Git, modify config & initialize:
 	Add LaTeX
 	Click notifiction -> show channel
 	Add "atelier-dune" css
-	Tab auto complete
 	Finish Menus:
 		Alt-Open connection
 		Change style
