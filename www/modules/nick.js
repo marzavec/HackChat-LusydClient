@@ -7,7 +7,7 @@ Description: listens for /nick & adjusts nick accordingly
 
 // hook main code into client input //
 modules.in.push(function(data){
-  // ignore if incoming data is json or is not afk command //
+  // ignore if incoming data is json or is not nick command //
   if(typeof data.cmd !== 'undefined' || data.split(' ')[0] != '/nick') return data;
 
   var cmdArray = data.split(' ');

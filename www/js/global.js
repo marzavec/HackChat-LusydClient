@@ -2,7 +2,6 @@
 var roomPresets = [];
 var connectedChannels = [];
 var currentChannel = 0;
-var ignoredUsers = [];
 var notifySound = new Audio('audio/notifi-sound.wav');
 var currentMenu = '';
 var odd = false;
@@ -265,11 +264,6 @@ function closeCurrentMenu(event){
 	removeClass(gui.menus[currentMenu], 'menuOpen');
 	gui.menus[currentMenu].parentNode.removeChild(gui.menus[currentMenu]);
 	currentMenu = '';
-}
-
-function ignoreUser(nick){
-	// this should be changed to server side; no point wasting bandwidth on scrubs //
-	ignoredUsers.push(nick);
 }
 
 function notifyUser(text, user){

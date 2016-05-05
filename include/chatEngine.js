@@ -16,7 +16,6 @@ chatEngine = {
 	ws: 0,
 	pingInterval: 0,
 	rejoinInterval: 0,
-	ignoredUsers: [],
 	lastPoster: '',
 
 
@@ -64,6 +63,8 @@ chatEngine = {
 			if(mainConfig.cacheEnabled) cacheControl.add(my.myID, data);
 
 			if(data.cmd == 'chat'){
+				if(lusydCore.isIgnored(data.nick) || lusydCore.isIgnored(data.nick, my.myID)) return;
+
 				data.isLastPoster = (my.lastPoster == data.nick);
 				my.lastPoster = data.nick;
 

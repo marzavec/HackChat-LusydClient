@@ -25,6 +25,16 @@ UI partially developed & based off of work from designs made by @ToastyStoemp
 
 
 
+# Client Text-based Commands
+*/nick newNick* - Changes nick for all channels
+*/afk* - Toggles afk status
+*/invite @nick* - Invites target user, '@' is optional
+*/ignore @nick* - Ignore user in all channels, or
+*/ignore @nick local* - Ignore user in current channel
+
+
+
+
 # Usage
 Lusyd is designed to be run on a vps. It can also be run on your home machine with port forwarding.
 
@@ -50,14 +60,32 @@ Clone Git, modify config & initialize:
 
 
 
-#To-do:
+#Beta To Do List:
 	Client timeout
 	Add LaTeX
 	Click notifiction -> show channel
 	Add "atelier-dune" css
+	Up key = last msg
 	Finish Menus:
 		Alt-Open connection
 		Change style
 		Invite user
 		Ignore user
 		AFK / change nick
+
+
+
+
+#Version 1 To Do List:
+	Store setting changes
+	Tighten UI (sizing, scrolling, more CSS)
+	Cleanup & commenting
+	Minified Release
+
+
+
+
+#Version 2 Features:
+	Client Hiving & associated features
+	JS-less Mode
+	Mobile Mode

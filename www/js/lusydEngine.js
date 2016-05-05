@@ -81,7 +81,19 @@ var lusydEngine = {
 			if(text == false) return;
 		}
 
-		this.send({ cmd: 'chatTo', id: id, text: text});
+		this.send({ cmd: 'chatTo', id: id, text: text });
+	},
+
+	sendInvite: function(targetNick, id){
+		id = typeof id !== 'undefined' ? id : connectedChannels[currentChannel].id;
+
+		this.send({ cmd: 'invite', id: id, nick: targetNick });
+	},
+
+	sendIgnore: function(targetNick, localOnly, id){
+		id = typeof id !== 'undefined' ? id : connectedChannels[currentChannel].id;
+
+		this.send({ cmd: 'ignore', id: id, nick: targetNick, localOnly: localOnly });
 	},
 
 	send: function(data){

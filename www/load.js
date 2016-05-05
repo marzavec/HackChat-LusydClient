@@ -12,7 +12,8 @@ var framework = {
 				// module files //
 				'modules/afk.js',
 				'modules/nick.js',
-				'modules/autoReply.js',
+				'modules/invite.js',
+				'modules/ignore.js',
 
 				// initialize lusyd client //
 				'js/init.js'

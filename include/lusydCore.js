@@ -4,6 +4,7 @@
 
 lusydCore = {
 	roomConnections: [],
+	ignoredUsers: [],
 
 	init: function(){
 		// placeholder //
@@ -117,8 +118,60 @@ lusydCore = {
 		for(var i = 0, j = this.roomConnections.length; i < j; i++){
 			if(this.roomConnections[i].myID == data.id){
 				this.roomConnections[i].say(data.text);
+				return;
 			}
 		}
+	},
+
+	invite: function(socket, data){
+		for(var i = 0, j = this.roomConnections.length; i < j; i++){
+			if(this.roomConnections[i].myID == data.id){
+				this.roomConnections[i].send({ 'cmd': 'invite', 'nick': data.nick });
+				return;
+			}
+		}
+	},
+
+	ignore: function(socket, data){
+		console.log(data);
+		var ignoredSlot = data.localOnly == true ? data.id : 'global';
+
+		if(typeof this.ignoredUsers[ignoredSlot] === 'undefined') this.ignoredUsers[ignoredSlot] = [];
+
+		if(typeof this.ignoredUsers[ignoredSlot][data.nick] === 'undefined'){
+			this.ignoredUsers[ignoredSlot][data.nick] = true;
+			if(ignoredSlot == 'global'){
+				wsServer.sendTo(socket, { 'cmd': 'info', 'id': data.id, 'text': '@' + data.nick + ' will be ignored globally.' });
+			}else{
+				wsServer.sendTo(socket, { 'cmd': 'info', 'id': data.id, 'text': '@' + data.nick + ' will be ignored locally.' });
+			}
+
+			return;
+		}
+
+		if(this.ignoredUsers[ignoredSlot][data.nick]){
+			this.ignoredUsers[ignoredSlot][data.nick] = false;
+			if(ignoredSlot == 'global'){
+				wsServer.sendTo(socket, { 'cmd': 'info', 'id': data.id, 'text': '@' + data.nick + ' has been removed from being ignored globally.' });
+			}else{
+				wsServer.sendTo(socket, { 'cmd': 'info', 'id': data.id, 'text': '@' + data.nick + ' has been removed from being ignored locally.' });
+			}
+		}else{
+			this.ignoredUsers[ignoredSlot][data.nick] = true;
+			if(ignoredSlot == 'global'){
+				wsServer.sendTo(socket, { 'cmd': 'info', 'id': data.id, 'text': '@' + data.nick + ' will be ignored globally.' });
+			}else{
+				wsServer.sendTo(socket, { 'cmd': 'info', 'id': data.id, 'text': '@' + data.nick + ' will be ignored locally.' });
+			}
+		}
+	},
+
+	isIgnored: function(nick, chatID){
+		chatID = typeof chatID !== 'undefined' ? chatID : 'global';
+
+		if(typeof this.ignoredUsers[chatID] === 'undefined' || typeof this.ignoredUsers[chatID][nick] === 'undefined') return false;
+
+		return this.ignoredUsers[chatID][nick];
 	},
 
 	changeNick: function(socket, data){
@@ -155,6 +208,10 @@ lusydCore = {
 				return;
 			}
 		}
+	},
+
+	infoReply: function(socket, data){
+
 	},
 
 	temp: function(){
