@@ -39,9 +39,10 @@ function connectionList(conList){
 }
 
 function onCacheMsgData(msgData){
+	var cached = true;
 	msgData.data.forEach(function(chatEvent){
 		chatEvent.id = msgData.id;
-		if(typeof window[chatEvent.cmd] == 'function') window[chatEvent.cmd](chatEvent);
+		if(typeof window[chatEvent.cmd] == 'function') window[chatEvent.cmd](chatEvent, cached);
 	});
 }
 
@@ -114,11 +115,13 @@ function chanIdToDiv(id){
 	}
 }
 
-function chat(data){
+function chat(data, isCached){
 	if(!document.hasFocus())
 		document.title = "(" + ++unreadCount + ") Lusyd Client";
 
 	pushMessage(chanIdToDiv(data.id), parseLinks(data));
+
+	if(typeof isCached === 'undefined' || isCached == false) return;
 
 	for(var i = 0, j = modules.out.length; i < j; i++){
 		data = modules.out[i](data);

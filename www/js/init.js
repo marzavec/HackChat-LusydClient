@@ -7,7 +7,7 @@ gui.init();
 window.onfocus = function() {
   unreadCount = 0;
   document.title = "Lusyd Client";
-  document.getElementById('chatInput').focus();
+  gui.chatInput.focus();
 }
 
 lusydEngine.init();
