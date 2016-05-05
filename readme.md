@@ -26,11 +26,11 @@ UI partially developed & based off of work from designs made by @ToastyStoemp
 
 
 # Client Text-based Commands
-*/nick newNick* - Changes nick for all channels
-*/afk* - Toggles afk status
-*/invite @nick* - Invites target user, '@' is optional
-*/ignore @nick* - Ignore user in all channels, or
-*/ignore @nick local* - Ignore user in current channel
+- */nick newNick* - Changes nick for all channels
+- */afk* - Toggles afk status
+- */invite @nick* - Invites target user, '@' is optional
+- */ignore @nick* - Ignore user in all channels, or
+- */ignore @nick local* - Ignore user in current channel
 
 
 
