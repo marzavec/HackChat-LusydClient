@@ -2,6 +2,7 @@ var lusydEngine = {
 	ws: 0,
 	firstConnect: true,
 	pingInterval: 0,
+	lastSent: [],
 
 	init: function(){
 		this.connect();
@@ -75,6 +76,8 @@ var lusydEngine = {
 
 	sendChat: function(text, id){
 		id = typeof id !== 'undefined' ? id : connectedChannels[currentChannel].id;
+
+		this.lastSent[id] = text;
 
 		for(var i = 0, j = modules.in.length; i < j; i++){
 			text = modules.in[i](text);

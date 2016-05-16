@@ -14,7 +14,7 @@ There are a few chat clients floating around, however I did not find any that me
 - [x] *Secure*, to use the client; you'll need to enter credentials. (Security needs to be made better, its bare bones atm)
 - [x] *Logging*, log security events, errors, etc.
 - [x] *Quick Nick Change*, quickly change nick across all channels; Marzavec -> afk_Marzavec
-- [ ] *LaTeX*, of course
+- [x] *LaTeX*, of course
 - [x] *Proxy Simple Content*, if enabled the server will pull images and videos, then send them to the client, protecting your IP from annoying people.
 
 
@@ -62,10 +62,6 @@ Clone Git, modify config & initialize:
 
 #Beta To Do List:
 	Client timeout
-	Add LaTeX
-	Click notifiction -> show channel
-	Add "atelier-dune" css
-	Up key = last msg
 	Finish Menus:
 		Alt-Open connection
 		Change style

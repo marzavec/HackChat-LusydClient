@@ -266,14 +266,18 @@ function closeCurrentMenu(event){
 	currentMenu = '';
 }
 
-function notifyUser(text, user){
+function notifyUser(text, user, chanID){
 	if(typeof text !== 'undefined'){
 		notifySound.play();
 
 		var notif = new Notification(user + ' mentioned you.', {
 			body: text,
-			icon: 'https://toastystoemp.com/public/notifi-icon.png'
+			icon: 'images/notification.png'
 		});
+
+		notif.onclick = function(){
+      changeChannel(chanID);
+    };
 
 		setTimeout(function(){
 			notif.close();
@@ -404,13 +408,21 @@ function pushMessage(targetDiv, data){
 	if(typeof data.mention !== 'undefined' && data.mention == true){
 		addClass(rightSide, 'mention');
 		if(!document.hasFocus()){
-			notifyUser(data.text, data.nick);
+			notifyUser(data.text, data.nick, data.id);
 		}
 	}else if(data.text.indexOf("@*") != -1){
 		addClass(rightSide, 'mention');
 	}
 
 	rightSide.innerHTML = data.text;
+
+	var allowKatex = true; // change later //
+	if(allowKatex && (data.text.match(/\$/g) || []).length >= 2){
+		renderMathInElement(rightSide, {delimiters: [
+			{left: "$$", right: "$$", display: true},
+			{left: "$", right: "$", display: false},
+		]});
+	}
 
 	chatLine.appendChild(rightSide);
 

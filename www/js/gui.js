@@ -3,7 +3,7 @@ var gui = {
 	tabHolder: '',
 	menus: [],
 	gatesOpen: false,
-	availableCss: ['default', 'android'],
+	availableCss: ['default', 'android', 'atelier-dune'],
 
 	init: function(channel, div){
 		this.chatInput = this.genDom('textarea', 'chatInput', 'chatInput', '', [], [{eventName: 'keydown', func: function(event){
@@ -34,6 +34,8 @@ var gui = {
 						this.selectionStart = selStart + (results[0].length - searchLen);
 						this.selectionEnd = selStart + (results[0].length - searchLen);
 					}
+				}else if(event.keyCode == 38 && !event.shiftKey && this.selectionStart === 0){
+					this.value = lusydEngine.lastSent[connectedChannels[currentChannel].id];
 				}
 			}}]);
 
@@ -290,5 +292,9 @@ var gui = {
 		currentMenu = id;
 		document.body.appendChild(this.menus[id]);
 		setTimeout( function(){ addClass(gui.menus[id], 'menuOpen'); }, 100);
+	},
+
+	changeStyle: function(newStyle){
+		document.getElementById('currentCss').setAttribute('href', 'css/' + newStyle + '.css');
 	}
 }
