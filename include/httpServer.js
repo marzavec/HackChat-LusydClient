@@ -19,7 +19,13 @@ httpServer = {
 
 		var ip = requestData.connection.remoteAddress.replace('::ffff:', ''); // replace() is for ws & os compatibility //
 
-		if(typeof requestData.headers['authorization'] === 'undefined' || httpServer.authedIPs.indexOf(ip) == -1){
+		if(typeof httpServer.authedIPs[ip] !== 'undefined' && httpServer.authedIPs[ip] == 'closed'){
+			httpServer.authedIPs[ip] = 'pending';
+			httpServer.sendAuthRequest(socket);
+			return;
+		}
+
+		if(typeof requestData.headers['authorization'] === 'undefined'){
 			httpServer.sendAuthRequest(socket);
 			return;
 		}
@@ -33,8 +39,8 @@ httpServer = {
 			return;
 		}
 
-		//console.log("http: " + ip)
-		if(httpServer.authedIPs.indexOf(ip) == -1) httpServer.authedIPs.push(ip);
+		if(typeof httpServer.authedIPs[ip] === 'undefined' || httpServer.authedIPs[ip] != 'authed')
+			httpServer.authedIPs[ip] = 'authed';
 
 		httpServer.serveRequest(requestData, socket);
 	},

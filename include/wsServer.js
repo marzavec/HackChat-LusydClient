@@ -13,7 +13,7 @@ wsServer = {
 	newConnection: function(socket){
 		var ip = socket.upgradeReq.connection.remoteAddress;
 
-		if(httpServer.authedIPs.indexOf(ip) == -1){
+		if(httpServer.authedIPs[ip] != 'authed'){
 			if(mainConfig.logSecurity) log.add('Security', 'unauthorized webSocket connection from ip: ' + ip);
 			socket.close();
 			return;

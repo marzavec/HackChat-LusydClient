@@ -7,6 +7,7 @@ var framework = {
 				'js/global.js',
 				'js/clientConfig.js',
 				'js/serverSettings.js',
+				'js/timeoutEngine.js',
 				'js/modules.js',
 
 				// module files //

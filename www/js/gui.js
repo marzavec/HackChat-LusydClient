@@ -47,141 +47,35 @@ var gui = {
 			}
 		}]));
 
-		// build main menu //
-		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon', '&#61975;', [{name: 'title', value: 'Close This Channel'}], [{eventName: 'mouseup', func: function(event){
-			gui.popMenu('close');
-		}}]));
-
-		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon', '&#61849;', [{name: 'title', value: 'Open New Channel'}], [{eventName: 'mouseup', func: function(event){
-			gui.popMenu('open');
-		}}]));
-
-		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon', '&#61972;', [{name: 'title', value: 'Display Settings'}], [{eventName: 'mouseup', func: function(event){
-			gui.popMenu('settings');
-		}}]));
-
-		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon', '&#61746;', [{name: 'title', value: 'Invite a User'}], [{eventName: 'mouseup', func: function(event){
-			gui.popMenu('invite');
-		}}]));
-
-		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon', '&#61968;', [{name: 'title', value: 'Ignore a User'}], [{eventName: 'mouseup', func: function(event){
-			gui.popMenu('ignore');
-		}}]));
-
-		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon', '&#61948;', [{name: 'title', value: 'My Profile'}], [{eventName: 'mouseup', func: function(event){
-			gui.popMenu('profile');
-		}}]));
-
-		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon', '&#61956;', [{name: 'title', value: 'Clear Messages'}], [{eventName: 'mouseup', func: function(event){
-			gui.popMenu('clear');
-		}}]));
-
-		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon', '&#61862;', [{name: 'title', value: 'Manage Clients'}], [{eventName: 'mouseup', func: function(event){
-			lusydEngine.send({cmd: 'getClientList'});
-			closeCurrentMenu();
-		}}]));
-
-		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
-			closeCurrentMenu();
-		}}]));
-
+		// main menu //
 		// build close menu //
-		this.addToMenu('close', 2, this.genDom('div', '', 'menuLabel', 'Close this channel?', [{name: 'style', value:'vertical-align: bottom;'}], []));
-
-		this.addToMenu('close', 2, this.genDom('div', '', 'menuLabel', 'Are you sure?', [{name: 'style', value:'vertical-align: bottom;'}], []));
-
-		this.addToMenu('close', 2, this.genDom('div', '', 'menuLink icon', '&#61796;', [{name: 'title', value: 'YES'},{name: 'style', value: 'color: #0F0;'}], [{eventName: 'mouseup', func: function(event){
-			lusydEngine.closeConnection(connectedChannels[currentChannel].id);
-			closeCurrentMenu();
-		}}]));
-
-		this.addToMenu('close', 2, this.genDom('div', '', 'menuLink icon', '&#61760;', [{name: 'title', value: 'NO'},{name: 'style', value: 'color: #F00;'}], [{eventName: 'mouseup', func: function(event){
-			closeCurrentMenu();
-		}}]));
-
-		this.addToMenu('close', 9, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
-			closeCurrentMenu();
-		}}]));
+		this.buildCloseMenu();
 
 		// build open menu //
-		var connectionList = this.genDom('select', 'styleList', 'menuLink', '', [], [{eventName: 'change', func: function(event){
-			closeCurrentMenu();
-			if(this.value == 'other'){
-				gui.popMenu('altopen');
-			}else{
-				openConnectionByTitle(this.value);
-			}
-		}}]);
-
-		var changeMe = document.createElement("option");
-		changeMe.value = '';
-		changeMe.text = '< Open New Connection >';
-		connectionList.appendChild(changeMe);
-
-		roomPresets.forEach(function(channel){
-			var opt = document.createElement("option");
-			opt.value = channel.title;
-			opt.text = channel.title;
-			connectionList.appendChild(opt);
-		});
-
-		var altConnection = document.createElement("option");
-		altConnection.value = 'other';
-		altConnection.text = '< Other >';
-		connectionList.appendChild(altConnection);
-
-		this.addToMenu('open', 1, connectionList);
-
-		this.addToMenu('open', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
-			closeCurrentMenu();
-		}}]));
+		this.buildOpenMenu();
 
 		// build alt open menu //
-		this.addToMenu('altopen', 1, this.genDom('div', '', 'menuLabel', 'Alternate open menu under development', [], []));
-
-		this.addToMenu('altopen', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
-			closeCurrentMenu();
-		}}]));
+		this.buildAltOpenMenu();
 
 		// build settings menu //
-		this.addToMenu('settings', 1, this.genDom('div', '', 'menuLabel', 'Settings menu under development', [], []));
-
-		this.addToMenu('settings', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
-			closeCurrentMenu();
-		}}]));
+		this.buildSettingsMenu();
 
 		// build invite menu //
-		this.addToMenu('invite', 1, this.genDom('div', '', 'menuLabel', 'Invite menu under development', [], []));
-
-		this.addToMenu('invite', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
-			closeCurrentMenu();
-		}}]));
+		this.buildInviteMenu();
 
 		// build ignore menu //
-		this.addToMenu('ignore', 1, this.genDom('div', '', 'menuLabel', 'Ignore menu under development', [], []));
-
-		this.addToMenu('ignore', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
-			closeCurrentMenu();
-		}}]));
+		this.buildIgnoreMenu();
 
 		// build user menu //
-		this.addToMenu('profile', 1, this.genDom('div', '', 'menuLabel', 'Profile menu under development', [], []));
-
-		this.addToMenu('profile', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
-			closeCurrentMenu();
-		}}]));
+		this.buildUserMenu();
 
 		// build client menu //
-		this.addToMenu('clients', 1, this.genDom('div', '', 'menuLabel', 'Refreshing. . .', [], []));
-
-		this.addToMenu('clients', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
-			closeCurrentMenu();
-		}}]));
+		this.buildClientMenu();
 
 		// build clear menu //
-		this.addToMenu('clear', 1, this.genDom('div', '', 'menuLabel', 'Clear menu under development', [], []));
+		this.buildClearMenu();
 
-		this.addToMenu('clear', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
+		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
 			closeCurrentMenu();
 		}}]));
 	},
@@ -218,6 +112,148 @@ var gui = {
 		});
 
 		return returnDom;
+	},
+
+	buildCloseMenu: function(){
+		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon', '&#61975;', [{name: 'title', value: 'Close This Channel'}], [{eventName: 'mouseup', func: function(event){
+			gui.popMenu('close');
+		}}]));
+
+		this.addToMenu('close', 2, this.genDom('div', '', 'menuLabel', 'Close this channel?', [{name: 'style', value:'vertical-align: bottom;'}], []));
+
+		this.addToMenu('close', 2, this.genDom('div', '', 'menuLabel', 'Are you sure?', [{name: 'style', value:'vertical-align: bottom;'}], []));
+
+		this.addToMenu('close', 2, this.genDom('div', '', 'menuLink icon', '&#61796;', [{name: 'title', value: 'YES'},{name: 'style', value: 'color: #0F0;'}], [{eventName: 'mouseup', func: function(event){
+			lusydEngine.closeConnection(connectedChannels[currentChannel].id);
+			closeCurrentMenu();
+		}}]));
+
+		this.addToMenu('close', 2, this.genDom('div', '', 'menuLink icon', '&#61760;', [{name: 'title', value: 'NO'},{name: 'style', value: 'color: #F00;'}], [{eventName: 'mouseup', func: function(event){
+			closeCurrentMenu();
+		}}]));
+
+		this.addToMenu('close', 9, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
+			closeCurrentMenu();
+		}}]));
+	},
+
+	buildOpenMenu: function(){
+		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon', '&#61849;', [{name: 'title', value: 'Open New Channel'}], [{eventName: 'mouseup', func: function(event){
+			gui.popMenu('open');
+		}}]));
+
+		var connectionList = this.genDom('select', 'styleList', 'menuLink', '', [], [{eventName: 'change', func: function(event){
+			closeCurrentMenu();
+			if(this.value == 'other'){
+				gui.popMenu('altopen');
+			}else{
+				openConnectionByTitle(this.value);
+			}
+		}}]);
+
+		var changeMe = document.createElement("option");
+		changeMe.value = '';
+		changeMe.text = '< Open New Connection >';
+		connectionList.appendChild(changeMe);
+
+		roomPresets.forEach(function(channel){
+			var opt = document.createElement("option");
+			opt.value = channel.title;
+			opt.text = channel.title;
+			connectionList.appendChild(opt);
+		});
+
+		var altConnection = document.createElement("option");
+		altConnection.value = 'other';
+		altConnection.text = '< Other >';
+		connectionList.appendChild(altConnection);
+
+		this.addToMenu('open', 1, connectionList);
+
+		this.addToMenu('open', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
+			closeCurrentMenu();
+		}}]));
+	},
+
+	buildAltOpenMenu: function(){
+		this.addToMenu('altopen', 1, this.genDom('div', '', 'menuLabel', 'Alternate open menu under development', [], []));
+
+		this.addToMenu('altopen', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
+			closeCurrentMenu();
+		}}]));
+	},
+
+	buildSettingsMenu: function(){
+		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon', '&#61972;', [{name: 'title', value: 'Display Settings'}], [{eventName: 'mouseup', func: function(event){
+			gui.popMenu('settings');
+		}}]));
+
+		this.addToMenu('settings', 1, this.genDom('div', '', 'menuLabel', 'Settings menu under development', [], []));
+
+		this.addToMenu('settings', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
+			closeCurrentMenu();
+		}}]));
+	},
+
+	buildInviteMenu: function(){
+		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon', '&#61746;', [{name: 'title', value: 'Invite a User'}], [{eventName: 'mouseup', func: function(event){
+			gui.popMenu('invite');
+		}}]));
+
+		this.addToMenu('invite', 1, this.genDom('div', '', 'menuLabel', 'Invite menu under development', [], []));
+
+		this.addToMenu('invite', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
+			closeCurrentMenu();
+		}}]));
+	},
+
+	buildIgnoreMenu: function(){
+		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon', '&#61968;', [{name: 'title', value: 'Ignore a User'}], [{eventName: 'mouseup', func: function(event){
+			gui.popMenu('ignore');
+		}}]));
+
+		this.addToMenu('ignore', 1, this.genDom('div', '', 'menuLabel', 'Ignore menu under development', [], []));
+
+		this.addToMenu('ignore', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
+			closeCurrentMenu();
+		}}]));
+	},
+
+	buildUserMenu: function(){
+		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon', '&#61948;', [{name: 'title', value: 'My Profile'}], [{eventName: 'mouseup', func: function(event){
+			gui.popMenu('profile');
+		}}]));
+
+		this.addToMenu('profile', 1, this.genDom('div', '', 'menuLabel', 'Profile menu under development', [], []));
+
+		this.addToMenu('profile', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
+			closeCurrentMenu();
+		}}]));
+	},
+
+	buildClientMenu: function(){
+		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon', '&#61862;', [{name: 'title', value: 'Manage Clients'}], [{eventName: 'mouseup', func: function(event){
+			lusydEngine.send({cmd: 'getClientList'});
+			closeCurrentMenu();
+		}}]));
+
+		this.addToMenu('clients', 1, this.genDom('div', '', 'menuLabel', 'Refreshing. . .', [], []));
+
+		this.addToMenu('clients', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
+			closeCurrentMenu();
+		}}]));
+	},
+
+	buildClearMenu: function(){
+		this.addToMenu('main', 4, this.genDom('div', '', 'menuLink icon', '&#61956;', [{name: 'title', value: 'Clear Messages'}], [{eventName: 'mouseup', func: function(event){
+			gui.popMenu('clear');
+		}}]));
+
+		this.addToMenu('clear', 1, this.genDom('div', '', 'menuLabel', 'Clear menu under development', [], []));
+
+		this.addToMenu('clear', 1, this.genDom('div', '', 'menuLink icon closeMenuBtn', '&#61974;', [{name: 'title', value: 'Close Menu'}], [{eventName: 'mouseup', func: function(event){
+			closeCurrentMenu();
+		}}]));
 	},
 
 	rebuildClientsMenu: function(data){

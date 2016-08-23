@@ -9,7 +9,7 @@ There are a few chat clients floating around, however I did not find any that me
 - [x] *Multi "Socket"*, one browser tab, several channels & the ability to connect to more & close them.
 - [x] *Enhanced UI Features*, notifications, easy to read alternating line colors, etc.
 - [x] *Message Caching*, in the spirit of Hack.Chat, no logs are made- however chat data is cached to memory so when you jump from one device / location to another; you won't miss anything.
-- [ ] *Client Timeout*, left the client open at work? Don't worry about your coworkers messing around under your name, the client will securely close if the mouse hasn't moved. They can also be force closed remotely.
+- [x] *Client Timeout*, left the client open at work? Don't worry about your coworkers messing around under your name, the client will securely close if the mouse hasn't moved. They can also be force closed remotely.
 - [x] *Module Based*, mutate the protocal, output or input using modules. Found a new server you want to connect to? No lengthy recoding needed; just make a new module. Text effects? Module.
 - [x] *Secure*, to use the client; you'll need to enter credentials. (Security needs to be made better, its bare bones atm)
 - [x] *Logging*, log security events, errors, etc.
@@ -20,7 +20,7 @@ There are a few chat clients floating around, however I did not find any that me
 
 
 
-UI partially developed & based off of work from designs made by @ToastyStoemp
+UI partially developed & based off of work from designs made by [@ToastyStoemp](https://github.com/ToastyStoemp)
 
 
 
@@ -61,7 +61,6 @@ Clone Git, modify config & initialize:
 
 
 #Beta To Do List:
-	Client timeout
 	Finish Menus:
 		Alt-Open connection
 		Change style

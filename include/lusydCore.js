@@ -199,10 +199,18 @@ lusydCore = {
 	},
 
 	killTargetClient: function(socket, data){
+		if(data.targetid == "this"){
+			httpServer.authedIPs[socket.upgradeReq.connection.remoteAddress] = 'closed';
+			wsServer.sendTo(socket, { 'cmd': 'onForward', 'destination': 'https://google.com/'  });
+			socket.close();
+
+			return;
+		}
+
 		for(var client of wsServer.serverSocket.clients){
 			if(client.upgradeReq.headers['sec-websocket-key'] == data.targetid){
-				httpServer.authedIPs.splice(httpServer.authedIPs.indexOf(client.upgradeReq.connection.remoteAddress), 1);
-				wsServer.sendTo(client, { 'cmd': 'onForward', 'destination': 'https://www.google.com/' });
+				httpServer.authedIPs[socket.upgradeReq.connection.remoteAddress] = 'closed';
+				wsServer.sendTo(client, { 'cmd': 'onForward', 'destination': 'https://google.com/' });
 				client.close();
 
 				return;

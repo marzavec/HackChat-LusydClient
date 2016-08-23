@@ -139,6 +139,7 @@ function warn(data){
 }
 
 function onlineAdd(data, isCached){
+	if(typeof users[data.id] === 'undefined') users[data.id] = [];
 	if(users[data.id].indexOf(data.nick) == -1) users[data.id].push(data.nick);
 
 	data.text = data.nick + ' joined';
