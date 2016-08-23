@@ -34,8 +34,8 @@ chatEngine = {
 
 	join: function(){
 		var my = this; // to maintain scope //
-
-		this.ws = new webSocket(this.myWsPath);
+		var wsOpts = { rejectUnauthorized: false };
+		this.ws = new webSocket(this.myWsPath, wsOpts);
 
 		this.ws.onopen = function(){
 			clearInterval(my.rejoinInterval);
